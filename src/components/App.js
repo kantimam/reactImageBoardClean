@@ -17,7 +17,10 @@ export default class ComponentName extends Component {
       super(props)
       this.scrollRef=React.createRef();
 
-      this.imageFeed={};
+
+      this.postsPagination={};
+      this.postsSearchPagination={};
+      this.postsUserFavoritePagination={};
       this.loadingMore=false;
       this.scrollWait=false;
  
@@ -142,6 +145,7 @@ export default class ComponentName extends Component {
     }
 
     handleScroll=(event)=>{
+      /* TODO HANDLE PEOPLE WITH GIANT SCREENS LOAD CONTENT UNTIL CONTENT OVERFLOWS */
       const scrollVal=event.target.scrollTop;
       const maxScroll=event.target.scrollHeight-event.target.offsetHeight;
 
@@ -173,6 +177,7 @@ export default class ComponentName extends Component {
             this.getPosts(`${BASEURL}/logged/${currentType}`,token,(res)=>{
                 //callback to create the first page of postarray
                 this.setState({postsUserFavorite: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
+                this.postsUserFavoritePagination=res.data;
               })
         }
       }
@@ -189,6 +194,7 @@ export default class ComponentName extends Component {
                 this.loadingMore=false
                 this.mainBoardLoaded=true
             })
+            this.postsPagination=res.data;
           })
         }
         
@@ -213,7 +219,6 @@ export default class ComponentName extends Component {
           axios.get(url, headers)
             .then(res=>{
             callback(res)
-            this.imageFeed=res.data;
           }).catch(error=>{
             if(error && error.response && error.response.status===403){
               this.loggedOutByServer();
@@ -221,23 +226,25 @@ export default class ComponentName extends Component {
             this.setState({error: true,loading: false})
           })
         }
-        if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
+        /* if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
           this.setState({endReached:true})
+        } */
+        
+      }
+      loadMore=(saveTo, paginationObject)=>{
+        const target=saveTo || 'posts';
+        if(paginationObject && paginationObject.next_page_url){
+          if(!this.loadingMore && this.state[target]){
+            this.getPosts(paginationObject.next_page_url,this.props.token,(res)=>{
+              //callback to append the new post "page" to current post array
+              this.setState({[target]:[...this.state[target],...res.data.data]} ,()=>this.loadingMore=false)
+            })
+          }
         }
         
       }
-      loadMore=(saveTo)=>{
-        const target=saveTo || 'posts';
-        if(!this.loadingMore && this.state[target]){
-          this.getPosts(this.imageFeed.next_page_url,this.props.token,(res)=>{
-            //callback to append the new post "page" to current post array
-            this.setState({[target]:[...this.state[target],...res.data.data]} ,()=>this.loadingMore=false)
-          })
-        }
-      }
   
       searchPosts=(url, search)=>{
-        /* console.log(search) */
         const token=this.state.token;
         if(search){
           const searchUrl=`${url}${search}`
@@ -249,20 +256,17 @@ export default class ComponentName extends Component {
               this.setState({postsSearch:res.data.data, loading: false, error: false},
                 ()=>{
                   this.loadingMore=false;
-                  /* this.props.history.push(`/tag/${tag}`); */
                 })
-              this.imageFeed=res.data;
+              this.postsSearchPagination=res.data;
             }).catch((error)=>{
               this.setState({postsSearch:[],loading: false,error: true},
                 ()=>{
                   this.loadingMore=false;
-                  /* this.props.history.push(`/tag/${tag}`); */
                 })
             })
           }
         }
         else{
-          /* this.props.history.push(""); */
         }
       }
 
@@ -330,7 +334,7 @@ export default class ComponentName extends Component {
                             token={this.state.token}
                             history={history}
                             openFull={this.fullScreenImage}
-                            loadMore={()=>this.loadMore('postsUserFavorite')} 
+                            loadMore={()=>this.loadMore('postsUserFavorite', this.postsUserFavoritePagination)} 
                             posts={this.state.postsUserFavorite} 
                             getUserPosts={this.getUserPosts}
                             loggedOutByServer={this.loggedOutByServer} 
@@ -340,7 +344,7 @@ export default class ComponentName extends Component {
     
                     <Route path={"/tag/:search"} render={({history, match})=>
                         <ImageBoard 
-                          loadMore={()=>this.loadMore('postsSearch')} 
+                          loadMore={()=>this.loadMore('postsSearch', this.postsSearchPagination)} 
                           key='boardTag' 
                           posts={this.state.postsSearch} 
                           getPosts={this.searchByTag} 
@@ -355,7 +359,7 @@ export default class ComponentName extends Component {
 
                     <Route path={"/search/:search"} render={({history, match})=>
                         <ImageBoard 
-                          loadMore={()=>this.loadMore('postsSearch')} 
+                          loadMore={()=>this.loadMore('postsSearch', this.postsSearchPagination)} 
                           key='boardSearch' 
                           posts={this.state.postsSearch} 
                           getPosts={this.searchByString} 
@@ -369,7 +373,7 @@ export default class ComponentName extends Component {
 
                     <Route path={"/"} render={({history})=>
                         <ImageBoard 
-                          loadMore={()=>this.loadMore('posts')} 
+                          loadMore={()=>this.loadMore('posts',this.postsPagination)} 
                           key='boardNew' 
                           posts={this.state.posts} 
                           getPosts={this.getNewPosts} 

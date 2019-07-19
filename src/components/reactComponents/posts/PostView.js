@@ -147,7 +147,7 @@ export default class PostView extends Component {
                   key={`preview${post.id}${index}`} 
                   post={post}
                   pathUrl={pathUrl}
-                />:<div/>
+                />:<div key={`preview${index}placeholder`}/>
                 )
               }
           </section>
