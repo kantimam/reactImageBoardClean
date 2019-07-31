@@ -148,16 +148,20 @@ export default class ComponentName extends Component {
       /* TODO HANDLE PEOPLE WITH GIANT SCREENS LOAD CONTENT UNTIL CONTENT OVERFLOWS */
       const scrollVal=event.target.scrollTop;
       const maxScroll=event.target.scrollHeight-event.target.offsetHeight;
-
+      /* TODO SHOULD FIRE IN IMAGEBOARD NOT HERE */
       const scrollPercent=scrollVal / maxScroll;
       if(scrollPercent>0.9 && !this.scrollWait){
         console.log(scrollPercent)
-        this.loadMore('posts')
+        this.loadMorePosts()
       }
       // after more content was loaded and scrollpercent is below 90% unlock again
       if(this.scrollWait && scrollPercent<=0.9){
         this.scrollWait=false;
       }
+    }
+
+    handleEndlessScroll=()=>{
+
     }
 
 
@@ -170,17 +174,17 @@ export default class ComponentName extends Component {
         this.setState({fullScreenImage:imageSource});
     }
 
-      getUserPosts=(type)=>{
-        const currentType=(type==='user' || type ==='favorites')?type : 'user';
-        const token=this.state.token;
-        if(token){
-            this.getPosts(`${BASEURL}/logged/${currentType}`,token,(res)=>{
-                //callback to create the first page of postarray
-                this.setState({postsUserFavorite: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
-                this.postsUserFavoritePagination=res.data;
-              })
-        }
+    getUserPosts=(type)=>{
+      const currentType=(type==='user' || type ==='favorites')?type : 'user';
+      const token=this.state.token;
+      if(token){
+          this.getPosts(`${BASEURL}/logged/${currentType}`,token,(res)=>{
+              //callback to create the first page of postarray
+              this.setState({postsUserFavorite: res.data.data,loading: false, error: false} ,()=>this.loadingMore=false)
+              this.postsUserFavoritePagination=res.data;
+            })
       }
+    }
 
 
       getNewPosts=()=>{
@@ -231,17 +235,54 @@ export default class ComponentName extends Component {
         } */
         
       }
-      loadMore=(saveTo, paginationObject)=>{
+/*       loadMore=(saveTo, paginationObject)=>{
         const target=saveTo || 'posts';
         if(paginationObject && paginationObject.next_page_url){
           if(!this.loadingMore && this.state[target]){
             this.getPosts(paginationObject.next_page_url,this.props.token,(res)=>{
+              console.log(paginationObject)
+              console.log(res)
+              paginationObject=res.data;
+              console.log(paginationObject)
               //callback to append the new post "page" to current post array
+              //paginationObject=res.data
               this.setState({[target]:[...this.state[target],...res.data.data]} ,()=>this.loadingMore=false)
             })
           }
         }
         
+      } */
+
+      loadMorePosts=()=>{
+        if(this.postsPagination && this.postsPagination.next_page_url && this.postsPagination.current_page!==this.postsPagination.last_page){
+          if(!this.loadingMore && this.state.posts){
+            this.getPosts(this.postsPagination.next_page_url,this.props.token,(res)=>{
+              this.postsPagination=res.data;
+              this.setState({posts:[...this.state.posts,...res.data.data]} ,()=>this.loadingMore=false)
+            })
+          }
+        }
+      }
+
+      loadMorePostsSearch=()=>{
+        if(this.postsSearchPagination && this.postsSearchPagination.next_page_url && this.postsSearchPagination.current_page!==this.postsSearchPagination.last_page){
+          if(!this.loadingMore && this.state.postsSearch){
+            this.getPosts(this.postsSearchPagination.next_page_url,this.props.token,(res)=>{
+              this.postsSearchPagination=res.data;
+              this.setState({postsSearch:[...this.state.postsSearch,...res.data.data]} ,()=>this.loadingMore=false)
+            })
+          }
+        }
+      }
+      loadMorePostsUserFavorite=()=>{
+        if(this.postsUserFavoritePagination && this.postsUserFavoritePagination.next_page_url && this.postsUserFavoritePagination.current_page!==this.postsUserFavoritePagination.last_page){
+          if(!this.loadingMore && this.state.postsUserFavorite){
+            this.getPosts(this.postsUserFavoritePagination.next_page_url,this.props.token,(res)=>{
+              this.postsUserFavoritePagination=res.data;
+              this.setState({postsUserFavorite:[...this.state.postsUserFavorite,...res.data.data]} ,()=>this.loadingMore=false)
+            })
+          }
+        }
       }
   
       searchPosts=(url, search)=>{
@@ -334,7 +375,7 @@ export default class ComponentName extends Component {
                             token={this.state.token}
                             history={history}
                             openFull={this.fullScreenImage}
-                            loadMore={()=>this.loadMore('postsUserFavorite', this.postsUserFavoritePagination)} 
+                            loadMore={this.loadMorePostsUserFavorite} 
                             posts={this.state.postsUserFavorite} 
                             getUserPosts={this.getUserPosts}
                             loggedOutByServer={this.loggedOutByServer} 
@@ -344,7 +385,7 @@ export default class ComponentName extends Component {
     
                     <Route path={"/tag/:search"} render={({history, match})=>
                         <ImageBoard 
-                          loadMore={()=>this.loadMore('postsSearch', this.postsSearchPagination)} 
+                          loadMore={this.loadMorePostsSearch} 
                           key='boardTag' 
                           posts={this.state.postsSearch} 
                           getPosts={this.searchByTag} 
@@ -359,7 +400,7 @@ export default class ComponentName extends Component {
 
                     <Route path={"/search/:search"} render={({history, match})=>
                         <ImageBoard 
-                          loadMore={()=>this.loadMore('postsSearch', this.postsSearchPagination)} 
+                          loadMore={this.loadMorePostsSearch} 
                           key='boardSearch' 
                           posts={this.state.postsSearch} 
                           getPosts={this.searchByString} 
@@ -373,7 +414,7 @@ export default class ComponentName extends Component {
 
                     <Route path={"/"} render={({history})=>
                         <ImageBoard 
-                          loadMore={()=>this.loadMore('posts',this.postsPagination)} 
+                          loadMore={this.loadMorePosts} 
                           key='boardNew' 
                           posts={this.state.posts} 
                           getPosts={this.getNewPosts} 
