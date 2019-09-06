@@ -48,6 +48,7 @@ export default class PostView extends Component {
 
   getPost=(id)=>{
     const path=this.props.token? `/logged${this.props.pathUrl}/posts/` : `${this.props.pathUrl}/posts/`;
+    /* const path=this.props.token? `/logged/posts/` : `/posts/`; */
     const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
     if(id){
       axios(`${BASEURL}${path}${id}`,headers)
@@ -60,8 +61,8 @@ export default class PostView extends Component {
             vote:  post.vote,
             rating: post.rating,
             postId:this.props.match.params.postId,
-            prev: post.prev,
-            next: post.next
+            prev: post.prev | [],
+            next: post.next | []
           })
             this.serverRating=post.rating
           }else{
@@ -151,8 +152,11 @@ export default class PostView extends Component {
                 )
               }
           </section>
-          {this.state.post.id&&<div className={'imageWrapper'}>
+          {this.state.post.id&&
+          <div className={'imageWrapper'}>
             <img alt='no img' src={currentImage}/>
+
+            {/* button to show image in full screen */}
             <div onClick={()=>openFull(currentImage)} className={'fullScreenButton'}>
               <i className="material-icons">
                 crop_free

@@ -151,7 +151,6 @@ export default class ComponentName extends Component {
       /* TODO SHOULD FIRE IN IMAGEBOARD NOT HERE */
       const scrollPercent=scrollVal / maxScroll;
       if(scrollPercent>0.9 && !this.scrollWait){
-        console.log(scrollPercent)
         this.loadMorePosts()
       }
       // after more content was loaded and scrollpercent is below 90% unlock again
@@ -159,11 +158,15 @@ export default class ComponentName extends Component {
         this.scrollWait=false;
       }
     }
-
+/* 
     handleEndlessScroll=()=>{
 
-    }
+    } */
 
+    handleBigScreen=(scrollRef)=>{
+      /* if there was not enough content loaded to fill the entire screen load more */
+      return scrollRef.current.scrollHeight === scrollRef.current.clientHeight
+    }
 
     setScroll=(amount)=>{
         const offset=-80;
@@ -197,6 +200,11 @@ export default class ComponentName extends Component {
               loading: false, error: false},()=>{
                 this.loadingMore=false
                 this.mainBoardLoaded=true
+                if(this.handleBigScreen(this.scrollRef)){
+                  /* if screen is not filled load more content should rarly happen but maybe people have giant screens...
+                  also wait 800ms to give dom some time to render */
+                  setTimeout(()=>this.loadMore('posts'),800);
+                }
             })
             this.postsPagination=res.data;
           })
