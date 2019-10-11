@@ -43,7 +43,7 @@ export default class CommentForm extends Component {
             .then(response=>{
                 if(response.status===200){
                     this.setState({
-                        succes:"succes!",
+                        succes:"succesfully created comment",
                         comment: ""
                     },()=>{
                         this.props.refreshPost()
@@ -71,9 +71,14 @@ export default class CommentForm extends Component {
     render() {
         return (
             <form className={'commentFormSimple'}>
-                {this.state.succes&&<div onClick={()=>this.setState({succes:""})} className={'commentInfo'}>{this.state.succes}</div>}
-                <textarea value={this.state.comment} onChange={this.onChange} name="comment" className={'commentText'} placeholder='write a comment' />
-                <input onClick={this.sendComment} className={'submitComment mainHover'} type='submit'></input>
+                {this.state.succes&&
+                <div onClick={()=>this.setState({succes:""})} className={'commentInfo'}>
+                    {this.state.succes}
+                </div>}
+                <div className="flexWrapper">
+                    <textarea value={this.state.comment} onChange={this.onChange} name="comment" className={'commentText'} placeholder='write a comment' />
+                    <input onClick={this.sendComment} className={'submitComment mainHover'} type='submit'></input>
+                </div>
             </form>
         )
     }

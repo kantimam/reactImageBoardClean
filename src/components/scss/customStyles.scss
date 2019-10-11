@@ -615,57 +615,20 @@ html,body{
     }
 }
 
-.commentForm{
-    margin-top: 3rem;
+.flexWrapper{
     width: 100%;
-    max-width: 50rem;
-    height: 10rem;
-    border-radius: 1rem;
-    background-color: rgba(200,200,200,0.4);
-    overflow: hidden;
-    border: 2px solid black;
-    position: relative;
-    .commentInfo{
-        text-align: center;
-        border-bottom: 1px solid white;
-        font-size: 1.4rem;
-    }
-    .commentText{
-        color: white;
-        height: 100%;
-        width: 90%;
-        margin: 0.5rem 1rem 0 1rem;
-        background-color: transparent;
-        border: none;
-        font-size: 1.4rem;
-        &:focus{
-            outline: none;
-        }
-        &::placeholder{
-            color: $primary-light;
-        }
-    }
-    .submitComment{
-        position: absolute;
-        right: 0.5rem;
-        bottom: 0.5rem;
-        float: right;
-        padding: 0.2rem 1rem;
-        font-size: 1.2rem;
-        border: 1px solid $primary-dark;
-        border-radius: 0.4rem;
-    }
+    display: flex;
 }
 
 .commentFormSimple{
     margin-top: 3rem;
     width: 100%;
-    display: flex;
-    position: relative;
     .commentInfo{
+        width: 100%;
+        flex: 0;
         text-align: center;
-        border-bottom: 1px solid white;
         font-size: 1.4rem;
+
     }
     .commentText{
         border-radius: 1rem 1rem 0 1rem;
@@ -685,8 +648,6 @@ html,body{
         }
     }
     .submitComment{
-        right: 0.5rem;
-        bottom: 0.5rem;
         padding: 0.2rem 1rem;
         font-size: 1.2rem;
         border: 1px solid $primary-dark;

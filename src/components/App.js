@@ -17,7 +17,7 @@ export default class ComponentName extends Component {
       super(props)
       this.scrollRef=React.createRef();
 
-
+      this.imageFeed={};
       this.postsPagination={};
       this.postsSearchPagination={};
       this.postsUserFavoritePagination={};
@@ -158,10 +158,7 @@ export default class ComponentName extends Component {
         this.scrollWait=false;
       }
     }
-/* 
-    handleEndlessScroll=()=>{
 
-    } */
 
     handleBigScreen=(scrollRef)=>{
       /* if there was not enough content loaded to fill the entire screen load more */
@@ -207,6 +204,7 @@ export default class ComponentName extends Component {
                 }
             })
             this.postsPagination=res.data;
+            this.imageFeed=res.data;
           })
         }
         
@@ -260,6 +258,28 @@ export default class ComponentName extends Component {
         }
         
       } */
+
+      loadMore=(saveTo)=>{
+        const target=saveTo || 'posts';
+        if(!this.loadingMore && this.state[target]){
+          this.getPosts(this.imageFeed.next_page_url,this.props.token,(res)=>{
+            //callback to append the new post "page" to current post array
+            this.setState({[target]:[...this.state[target],...res.data.data]} ,()=>this.loadingMore=false)
+          })
+        }
+      }
+
+      loadOlder=(saveTo)=>{
+        const target=saveTo || 'posts';
+        if(!this.loadingMore && this.state[target]){
+          this.getPosts(this.imageFeed.prev_page_url,this.props.token,(res)=>{
+            console.log(res.data[0])
+            //callback to append the new post "page" to current post array
+            this.setState({[target]:[...res.data[0].data, ...this.state[target]]} ,()=>this.loadingMore=false)
+          })
+        }
+      }
+
 
       loadMorePosts=()=>{
         if(this.postsPagination && this.postsPagination.next_page_url && this.postsPagination.current_page!==this.postsPagination.last_page){
@@ -355,6 +375,7 @@ export default class ComponentName extends Component {
                     </div>
                   </div>}
 
+                  {/* Modal to login or sign up */}
                   {this.state.logSignOpen&&
                   <div className={"uploadModal centerAll"}>
                     <div className={"innerContent  fixHeightNoBorder"}>

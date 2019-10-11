@@ -5,7 +5,7 @@ import PostItem from './PostItem.js';
 /* import CommentForm from './postView/CommentForm.js' */
 import CommentForm from './postView/CommentFormTwo.js'
 import axios from 'axios';
-import {Link} from 'react-router-dom'
+/* import {Link} from 'react-router-dom' */
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 
@@ -61,8 +61,8 @@ export default class PostView extends Component {
             vote:  post.vote,
             rating: post.rating,
             postId:this.props.match.params.postId,
-            prev: post.prev | [],
-            next: post.next | []
+            prev: post.prev || [],
+            next: post.next || []
           })
             this.serverRating=post.rating
           }else{
