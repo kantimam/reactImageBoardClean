@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import ImageBoard from './reactComponents/ImageBoard.js'
 import UserPage from './reactComponents/user/UserPage.js'
-import SignUp from './reactComponents/user/SignUp.js'
 import NavBar from './reactComponents/NavBar.js'
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import './scss/customStyles.css';
 import CreatePost from './reactComponents/user/CreatePost.js'
 import FullScreenModal from './reactComponents/FullScreenModal.js'
+import CloseButton from './reactComponents/closeButton.jsx';
+import LogSignModal from './reactComponents/logSignModal.jsx';
 import axios from 'axios';
+import FullScreenImage from './reactComponents/fullScreenImage.jsx';
 const BASEURL=`${process.env.REACT_APP_BE_URL}`;
 
 
@@ -26,16 +28,11 @@ export default class ComponentName extends Component {
  
       this.state = {
           uploadOpen: false,
-          zoom: false,
           logSignOpen: false,
           loggedIn: false,
           mobileNavOpen: false,
 
           signUpStatus: 0,
-          name: "",
-          email: "",
-          password: "",
-          passwordRe: "",
           token: "",
 
 
@@ -197,14 +194,16 @@ export default class ComponentName extends Component {
               loading: false, error: false},()=>{
                 this.loadingMore=false
                 this.mainBoardLoaded=true
+                this.postsPagination=res.data;
+                this.imageFeed=res.data;
+                
                 if(this.handleBigScreen(this.scrollRef)){
                   /* if screen is not filled load more content should rarly happen but maybe people have giant screens...
                   also wait 800ms to give dom some time to render */
                   setTimeout(()=>this.loadMore('posts'),800);
                 }
             })
-            this.postsPagination=res.data;
-            this.imageFeed=res.data;
+            
           })
         }
         
@@ -236,35 +235,18 @@ export default class ComponentName extends Component {
             this.setState({error: true,loading: false})
           })
         }
-        /* if(this.imageFeed.current_page===this.imageFeed.last_page && this.state.endReached===false){
-          this.setState({endReached:true})
-        } */
+      
         
       }
-/*       loadMore=(saveTo, paginationObject)=>{
-        const target=saveTo || 'posts';
-        if(paginationObject && paginationObject.next_page_url){
-          if(!this.loadingMore && this.state[target]){
-            this.getPosts(paginationObject.next_page_url,this.props.token,(res)=>{
-              console.log(paginationObject)
-              console.log(res)
-              paginationObject=res.data;
-              console.log(paginationObject)
-              //callback to append the new post "page" to current post array
-              //paginationObject=res.data
-              this.setState({[target]:[...this.state[target],...res.data.data]} ,()=>this.loadingMore=false)
-            })
-          }
-        }
-        
-      } */
+
 
       loadMore=(saveTo)=>{
         const target=saveTo || 'posts';
         if(!this.loadingMore && this.state[target]){
           this.getPosts(this.imageFeed.next_page_url,this.props.token,(res)=>{
             //callback to append the new post "page" to current post array
-            this.setState({[target]:[...this.state[target],...res.data.data]} ,()=>this.loadingMore=false)
+            this.setState({[target]:[...this.state[target],...res.data.data]} ,()=>this.loadingMore=false);
+            this[`${target}Pagination`]=res.data;
           })
         }
       }
@@ -368,34 +350,13 @@ export default class ComponentName extends Component {
                   {this.state.uploadOpen&&
                   <div className={"uploadModal centerAll"}>
                     <div className={"innerContent"}>
-                        <i onClick={()=>this.setState({uploadOpen: false})} className="material-icons closeButton">
-                            close
-                        </i>
+                        <CloseButton onClick={()=>this.setState({uploadOpen: false})}/>
                         <CreatePost token={this.state.token}/>
                     </div>
                   </div>}
 
                   {/* Modal to login or sign up */}
-                  {this.state.logSignOpen&&
-                  <div className={"uploadModal centerAll"}>
-                    <div className={"innerContent  fixHeightNoBorder"}>
-                        <i onClick={()=>this.setState({logSignOpen: false})} className="material-icons closeButton">
-                            close
-                        </i>
-                        <SignUp 
-                            logIn={this.logIn}
-                            signUp={this.signUp}
-                            sign={()=>this.setState({signUpStatus:0})}
-                            log={()=>this.setState({signUpStatus:1})}
-                            signUpStatus={this.state.signUpStatus}
-                            onChange={this.onChange}
-                            name={this.state.name}
-                            email={this.state.email}
-                            password={this.state.password}
-                            passwordRe={this.state.passwordRe}
-                        />
-                    </div>
-                  </div>}
+                  {this.state.logSignOpen&&<LogSignModal loggedIn={""} signedUp={""} close={()=>this.setState({logSignOpen: false})}/>}
                   
                   <Switch>
                     {this.state.loggedIn && 
@@ -459,19 +420,8 @@ export default class ComponentName extends Component {
                 </main>
                 {this.state.fullScreenImage&&
                 <FullScreenModal>
-                    <img 
-                        onClick={()=>this.setState({zoom:!this.state.zoom})} 
-                        alt='' 
-                        className="fullScreenImage" 
-                        src={this.state.fullScreenImage}
-                        style={this.state.zoom?{objectFit:"cover"}:{objectFit:"contain",height: "99.6%"}}
-                    />
-                    <div className={"centerAll shortInfo"}>
-                        <p>CLICK THE PICTURE AGAIN TO ZOOM IN!</p>
-                    </div>
-                    <i onClick={()=>this.setState({fullScreenImage:""})} className="material-icons closeButton">
-                        close
-                    </i>
+                    <FullScreenImage imgSrc={this.state.fullScreenImage}/>
+                    <CloseButton onClick={()=>this.setState({fullScreenImage:""})}/>
                 </FullScreenModal>}
             </div>
         </BrowserRouter>

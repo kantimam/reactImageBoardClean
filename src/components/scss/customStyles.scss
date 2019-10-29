@@ -369,7 +369,10 @@ html,body{
     border-radius: 2rem;
     overflow: hidden;
     border:1px solid transparent;
-    
+    label{
+        cursor: pointer;
+    }
+
     .searchInput{
         width: 100%;
         background-color: transparent;
@@ -388,13 +391,7 @@ html,body{
             outline: none;
             background-color: transparent !important;
         }
-        /* &:-webkit-autofill{
-            background-color: transparent !important;
-
-        }
-        &:-webkit-autofill:focus{
-            background-color: transparent !important;
-        } */
+        
     }
     
     
@@ -491,6 +488,7 @@ html,body{
     }
 }
 .closeButton{
+    user-select: none;
     cursor: pointer;
     background-color: $primary-dark;
     padding: 0.6rem;
@@ -498,9 +496,10 @@ html,body{
     font-size: 2.2rem;
     position: absolute;
     border: 1px solid $primary-light;
+    transition: 0.2s;
     &:hover{
         font-weight: bold;
-        transform: scale(1.4)
+        transform: scale(1.2)
     }
 }
 .uploadModal{

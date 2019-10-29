@@ -14,7 +14,6 @@ export default class PostView extends Component {
   
   constructor(props) {
     super(props)
-    /* console.log(this.props.match.params.postId) */
     this.scrollRef=React.createRef();
     this.img_url='https://img.pr0gramm.com/2019/05/15/159cd1cb97de3843.png'
     this.serverRating=0;
