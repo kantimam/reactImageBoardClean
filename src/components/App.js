@@ -10,6 +10,7 @@ import CloseButton from './reactComponents/closeButton.jsx';
 import LogSignModal from './reactComponents/logSignModal.jsx';
 import axios from 'axios';
 import FullScreenImage from './reactComponents/fullScreenImage.jsx';
+import UploadModal from './reactComponents/UploadModal.jsx';
 const BASEURL=`${process.env.REACT_APP_BE_URL}`;
 
 
@@ -46,52 +47,23 @@ export default class ComponentName extends Component {
           endReached: false,
           loading: true,
           error: false,
+
+          user: {}
          
       }
     }
     onChange=(event)=>{
         this.setState({[event.target.name]:event.target.value})
     }
-    
-    signUp=(event)=>{
-        event.preventDefault();
-        if(this.validateState){
-            const formData=new FormData();
-            formData.append("name",this.state.name);
-            formData.append("email",this.state.email);
-            formData.append("password",this.state.password);
-            axios.post(`${BASEURL}/signup`,formData).then(response=>{
-                console.log(response)
-                this.setState({signUpStatus:1})
-            }).catch(error=>{
-                window.alert("failure")
-                console.log(error)
-            })
-        }
-        
-    }
 
-    logIn=(event)=>{
-        event.preventDefault();
-            const formData=new FormData();
-            formData.append("email",this.state.email);
-            formData.append("password",this.state.password);
-            axios.post(`${BASEURL}/login`,formData,{credentials: true}).then(response=>{
-                console.log(response)
-                this.setState({
-                    loggedIn:true, 
-                    logSignOpen: false,
-                    token:response.data.token,
-                    name: "",
-                    email: "",
-                    password: "",
-                    passwordRe: "",
-                    },
-                    ()=>this.createLocalStore())
-            }).catch(error=>{
-                window.alert("failure")
-                console.log(error)
-            })
+
+    loggedIn=(data)=>{
+      this.setState({
+        loggedIn:true, 
+        logSignOpen: false,
+        token:data.token,
+        },
+        ()=>this.createLocalStore())
     }
     logOut=(event)=>{
         event.preventDefault();
@@ -112,20 +84,6 @@ export default class ComponentName extends Component {
       })
       alert('you have been logged out')
       localStorage.removeItem("userState");
-    }
-
-    validateState=()=>{
-        
-        const {name,email,password,passwordRe}=this.state;
-        let valid=false;
-        //matching pw length in backend
-        if(name.length>3 &&
-            email.length>4  &&
-            password.length>7 &&
-            password===passwordRe){
-                valid=true;
-            }
-        return valid;
     }
 
     createLocalStore=()=>{
@@ -345,18 +303,13 @@ export default class ComponentName extends Component {
                 }/>    
                 </header>
                 
+                {/* MAIN CONTAINER CORE CONTENT */}
                 <main ref={this.scrollRef}>
                   
-                  {this.state.uploadOpen&&
-                  <div className={"uploadModal centerAll"}>
-                    <div className={"innerContent"}>
-                        <CloseButton onClick={()=>this.setState({uploadOpen: false})}/>
-                        <CreatePost token={this.state.token}/>
-                    </div>
-                  </div>}
+                  {this.state.uploadOpen&&<UploadModal close={()=>this.setState({uploadOpen: false})} token={this.state.token}/>}
 
                   {/* Modal to login or sign up */}
-                  {this.state.logSignOpen&&<LogSignModal loggedIn={""} signedUp={""} close={()=>this.setState({logSignOpen: false})}/>}
+                  {this.state.logSignOpen&&<LogSignModal loggedIn={this.loggedIn} signedUp={""} close={()=>this.setState({logSignOpen: false})}/>}
                   
                   <Switch>
                     {this.state.loggedIn && 
@@ -418,11 +371,13 @@ export default class ComponentName extends Component {
                     />
                   </Switch>
                 </main>
+
                 {this.state.fullScreenImage&&
-                <FullScreenModal>
-                    <FullScreenImage imgSrc={this.state.fullScreenImage}/>
-                    <CloseButton onClick={()=>this.setState({fullScreenImage:""})}/>
-                </FullScreenModal>}
+                  <FullScreenImage 
+                    imgSrc={this.state.fullScreenImage} 
+                    close={()=>this.setState({fullScreenImage:""})}
+                  />
+                }
             </div>
         </BrowserRouter>
         );

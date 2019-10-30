@@ -70,7 +70,6 @@ export default class ImageBoard extends Component {
         <Switch>
           <Route path={['/post/:postId','/profile/post/:postId','/tag/:search/post/:postId','/search/:search/post/:postId']} render={(props)=> 
            /* TODO CREATE FEED WHEN THIS IS RENDERED FIRST */
-   
             this.props.posts.length>0&&
               <PostView 
                 token={this.props.token}
@@ -85,7 +84,6 @@ export default class ImageBoard extends Component {
               />}
           />
           <Route path='/' render={()=>
-          /* TODO MAKE THIS INTO FUNCTIONAL COMPONENT AND USE EFFECT TO GET POSTS */
             <div id='imageBoard' className={'imageGrid'}>
               {(this.props.posts && this.props.posts.length>0)&&this.props.posts.map((post, index)=>
                 <PostItem 

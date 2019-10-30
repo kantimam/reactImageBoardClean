@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import FileInputField from './userPage/FileInputField.js'
-//const BASEURL="http://192.168.178.21/image-board/public/posts"
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 
@@ -20,15 +19,7 @@ export default class CreatePost extends Component {
          postCreated: ""
       }
     }
-  
-/*   changeFile(event){
-    const val=event.target.files[0];
-    let blob=new Blob([val])
-    let objectURL=URL.createObjectURL(blob);
-    this.setState({upload:objectURL,file:val})
-    console.dir(val)
-    
-  } */
+
   changeFile(file){
     const val=file[0];
     let blob=new Blob([val])

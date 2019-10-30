@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
+import FullScreenModal from './FullScreenModal.js';
+import CloseButton from './closeButton.jsx';
 
-const FullScreenImage = ({imgSrc}) => {
+const FullScreenImage = ({imgSrc, close}) => {
     const [zoom, setZoom]=useState(false);
 
     return (
-        <>
+        <FullScreenModal>
           <img 
                 onClick={()=>setZoom(!zoom)} 
                 alt='' 
@@ -14,8 +16,9 @@ const FullScreenImage = ({imgSrc}) => {
             />
             <div className={"centerAll shortInfo"}>
                 <p>CLICK THE PICTURE AGAIN TO ZOOM IN!</p>
-            </div>  
-        </>
+            </div>
+            <CloseButton onClick={close}/>  
+        </FullScreenModal>
     )
 }
 

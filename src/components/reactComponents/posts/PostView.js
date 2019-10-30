@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import PostRating from './postView/PostRating.js'
 import PostComments from './postView/PostComments.js'
 import PostItem from './PostItem.js';
-/* import CommentForm from './postView/CommentForm.js' */
 import CommentForm from './postView/CommentFormTwo.js'
+import PostNavigation from './PostNavigation.jsx';
 import axios from 'axios';
-/* import {Link} from 'react-router-dom' */
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 
@@ -176,6 +175,7 @@ export default class PostView extends Component {
                 </i>
               </div>
             }
+            <PostNavigation/>
           </div>}
           
           <PostRating 

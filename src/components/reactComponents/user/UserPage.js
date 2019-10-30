@@ -34,6 +34,7 @@ export default class UserPage extends Component {
           </button>
         </WelcomeBanner>
         {this.state.openUpload&&<CreatePost token={this.props.token}/>}
+        
         <section className={'postBoardProfile'}>
           <div className={"profilePostWrapper"}>
             <h1 onClick={()=>this.setState({mode: "user"},()=>this.goTo())} className={`toggleMyPostsView pointer ${this.state.mode==="user"?"":"inactive"}`}>

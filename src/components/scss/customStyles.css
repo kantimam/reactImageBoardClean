@@ -94,33 +94,10 @@ html, body {
   padding-bottom: 1rem;
 }
 
-/* #imageBoard{
-    width: 100%;
-    max-width: $containerWidth;
-    margin: 0 auto;
-    
-} */
-/* .imageGrid{
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 auto;
-    padding-bottom: 3rem;
-    .postItem{
-        width: calc(80rem / 5) !important;
-        //use 16/9 dim
-        height: calc( ((80rem / 5) / 16) * 9 ) !important;
-        box-sizing: border-box;
-        padding: 0.1rem;
-    }
-}
- */
 .postItem {
-  /* max-height: 9rem;
-    width: 16rem; */
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;
       align-self: center;
-  /* margin: 0.1rem; */
   overflow: hidden;
   position: relative;
 }
@@ -638,8 +615,8 @@ html, body {
 
 @-webkit-keyframes slideInFromTop {
   0% {
-    -webkit-transform: translateY(-100vh) scale(0);
-            transform: translateY(-100vh) scale(0);
+    -webkit-transform: translateY(-70vh) scale(0);
+            transform: translateY(-70vh) scale(0);
   }
   100% {
     -webkit-transform: translateY(0) scale(1);
@@ -649,8 +626,8 @@ html, body {
 
 @keyframes slideInFromTop {
   0% {
-    -webkit-transform: translateY(-100vh) scale(0);
-            transform: translateY(-100vh) scale(0);
+    -webkit-transform: translateY(-70vh) scale(0);
+            transform: translateY(-70vh) scale(0);
   }
   100% {
     -webkit-transform: translateY(0) scale(1);
@@ -680,16 +657,16 @@ html, body {
           transform: scale(1.2);
 }
 
-.uploadModal {
+.animatedModal {
   position: fixed;
   width: 100%;
   height: 100%;
   z-index: 1;
 }
 
-.uploadModal .innerContent {
-  -webkit-animation: slideInFromTop 1s ease-in-out;
-          animation: slideInFromTop 1s ease-in-out;
+.animatedModal .innerContent {
+  -webkit-animation: slideInFromTop 0.4s ease-in-out;
+          animation: slideInFromTop 0.4s ease-in-out;
   max-width: 84rem !important;
   border-radius: 1rem;
   border: 1px solid #e7b9ff;
@@ -699,9 +676,13 @@ html, body {
   position: relative;
 }
 
-.uploadModal .closeButton {
+.animatedModal .closeButton {
   right: -1.4rem;
   top: -1.4rem;
+}
+
+.uploadContainer {
+  margin-bottom: 14%;
 }
 
 .uploadComp {
@@ -888,7 +869,6 @@ html, body {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   background-color: #2e3035;
-  /* border: 1px solid $primary-light; */
   border-bottom: 1px solid #e7b9ff;
   border-right: 1px solid #e7b9ff;
   border-left: 1px solid #e7b9ff;
@@ -916,13 +896,13 @@ html, body {
 
 .logSignContainer {
   width: 100%;
+  /* Tab navigation to switch between signup and login */
 }
 
 .logSignContainer .logSignSwitch {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  /* margin-bottom: 2rem; */
   overflow: hidden;
 }
 
