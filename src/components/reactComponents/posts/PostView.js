@@ -160,22 +160,13 @@ export default class PostView extends Component {
                 crop_free
               </i>
             </div>
-
-            {this.state.next[0]&&
-              <div onClick={()=>this.getNextPost(this.state.next[0])} className={'undecoratedLink postNav navForward centerAll'}>
-                <i className="material-icons">
-                  keyboard_arrow_right
-                </i>
-              </div>
-            }
-            {this.state.prev[0]&&
-              <div onClick={()=>this.getNextPost(this.state.prev[0])} className={'undecoratedLink postNav navBack centerAll'}>
-                <i className="material-icons">
-                  keyboard_arrow_left
-                </i>
-              </div>
-            }
-            <PostNavigation/>
+            
+            <PostNavigation 
+              getNextPost={this.getNextPost}
+              getPrevPost={this.getPrevPost}
+              next={this.state.next[0]}
+              prev={this.state.prev[0]}
+            />
           </div>}
           
           <PostRating 

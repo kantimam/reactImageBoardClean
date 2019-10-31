@@ -4,9 +4,6 @@ import UserPage from './reactComponents/user/UserPage.js'
 import NavBar from './reactComponents/NavBar.js'
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import './scss/customStyles.css';
-import CreatePost from './reactComponents/user/CreatePost.js'
-import FullScreenModal from './reactComponents/FullScreenModal.js'
-import CloseButton from './reactComponents/closeButton.jsx';
 import LogSignModal from './reactComponents/logSignModal.jsx';
 import axios from 'axios';
 import FullScreenImage from './reactComponents/fullScreenImage.jsx';
