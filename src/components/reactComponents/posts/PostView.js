@@ -16,6 +16,9 @@ export default class PostView extends Component {
     this.scrollRef=React.createRef();
     this.img_url='https://img.pr0gramm.com/2019/05/15/159cd1cb97de3843.png'
     this.serverRating=0;
+
+    this.loading=false;
+
     this.state = {
       post: {},
       postId: this.props.match.params.postId || 0,
@@ -29,8 +32,10 @@ export default class PostView extends Component {
   
 
   componentDidUpdate=()=>{
-    if(this.props.match.params.postId!==this.state.postId){
-      this.getPost(this.props.match.params.postId  || 0)
+    /* if loading next or previous post dont listen for route and postId difference to avoid multiple reloads */
+    if(!this.loading && this.props.match.params.postId!==this.state.postId){
+      console.log("was called")
+      this.getCurrentPost(this.props.match.params.postId  || 0)
       if(this.props.match.params.postId>=(this.props.posts[this.props.posts.length-1].id)){
         this.props.loadMore()
       }
@@ -38,60 +43,80 @@ export default class PostView extends Component {
     
   }
   componentDidMount(){
-    this.getPost(this.state.postId);
-
+    this.getCurrentPost(this.state.postId);
   }
 
+  handleError=(error)=>{
+    if(error && error.response && error.response.status===403){
+      this.props.loggedOutByServer();
+    }
+    this.props.history.push('/') 
+  }
 
-
-  getPost=(id)=>{
-    const path=this.props.token? `/logged${this.props.pathUrl}/posts/` : `${this.props.pathUrl}/posts/`;
-    /* const path=this.props.token? `/logged/posts/` : `/posts/`; */
+  getPost=(id, apiPath)=>{
+    const path=this.props.token? `/logged${this.props.pathUrl}/${apiPath}/` : `${this.props.pathUrl}/${apiPath}/`;
     const headers=this.props.token?{headers:{"Authorization":`Bearer ${this.props.token}`}}:{};
-    if(id){
-      axios(`${BASEURL}${path}${id}`,headers)
-      .then(res=>{
-        const post=res.data
-        if(post.id || post.length>0){
-          this.setState({
-            post:post,
-            favorite: post.users_with_favorite,
-            vote:  post.vote,
-            rating: post.rating,
-            postId:this.props.match.params.postId,
-            prev: post.prev || [],
-            next: post.next || []
-          })
-            this.serverRating=post.rating
-          }else{
-            this.props.history.push('/')
+    return axios(`${BASEURL}${path}${id}`,headers)
+    .then(res=>res.data)
+  }
 
-          }
-        }
-        
-      ).catch(error=>{
-        if(error && error.response && error.response.status===403){
-          this.props.loggedOutByServer();
-        }
-        this.props.history.push('/') 
+
+  getCurrentPost=(id)=>{
+    this.getPost(id, 'posts')
+    .then(post=>{
+      this.setState({
+        post:post,
+        favorite: post.users_with_favorite,
+        vote:  post.vote,
+        rating: post.rating,
+        postId:this.props.match.params.postId,
+        prev: post.prev || [],
+        next: post.next || []
       })
-
-    }
+        this.serverRating=post.rating
+      }).catch(error=>this.handleError(error))
+    
   }
 
-  getNextPost=(next)=>{
-    if(next && next.id){
-      this.getPost(next.id)
-      this.props.history.push(`/post/${next.id}`) 
-    }  
+  getNextPost=()=>{
+    this.getPost(this.state.postId, "nextpost")
+    .then(post=>{
+      this.loading=true;
+      this.props.history.push(`/post/${post.id}`) 
+      this.setState({
+        prev: [{id: this.state.post.id, thumbnail: this.state.post.thumbnail}, this.state.prev[0]],
+        post: post,
+        favorite: post.users_with_favorite,
+        vote:  post.vote,
+        rating: post.rating,
+        postId: post.id,
+        next: [this.state.next[1], post.next] || [],
+      },()=>this.loading=false)
+        this.serverRating=post.rating
+      }).catch(error=>this.handleError(error))
+    
   }
 
-  getPrevPost=(prev)=>{
-    if(prev && prev.id){
-      this.getPost(prev.id)
-      this.props.history.push(`/post/${prev.id}`) 
-    }
+  getPrevPost=()=>{
+    this.getPost(this.state.postId, "prevpost")
+    .then(post=>{
+      /* lock any further calls */
+      this.loading=true;
+      this.props.history.push(`/post/${post.id}`) 
+      this.setState({
+        next: [{id: this.state.post.id, thumbnail: this.state.post.thumbnail}, this.state.next[0]],
+        post:post,
+        favorite: post.users_with_favorite,
+        vote:  post.vote,
+        rating: post.rating,
+        postId: post.id,
+        prev: [this.state.prev[1], post.prev] || []
+      },()=>this.loading=false)  //unlock further calls
+        this.serverRating=post.rating
+      }).catch(error=>this.handleError(error))
+    
   }
+
 
   toggleFavorite=()=>{
     const id=this.state.postId;
@@ -160,7 +185,7 @@ export default class PostView extends Component {
                 crop_free
               </i>
             </div>
-            
+
             <PostNavigation 
               getNextPost={this.getNextPost}
               getPrevPost={this.getPrevPost}
@@ -182,12 +207,6 @@ export default class PostView extends Component {
             history={history}
           />
           
-          
-          {/* <CommentForm 
-            currentPost={this.state.post.id}
-            refreshPost={()=>this.getPost(this.state.postId)}
-            token={token}
-          /> */}
           <CommentForm 
             currentPost={this.state.post.id}
             refreshPost={()=>this.getPost(this.state.postId)}
