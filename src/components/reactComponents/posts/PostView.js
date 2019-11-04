@@ -5,6 +5,7 @@ import PostItem from './PostItem.js';
 import CommentForm from './postView/CommentFormTwo.js'
 import PostNavigation from './PostNavigation.jsx';
 import axios from 'axios';
+import PostPreview from './PostPreview.jsx';
 const BASEURL=`${process.env.REACT_APP_BE_URL}`
 
 
@@ -158,23 +159,18 @@ export default class PostView extends Component {
   
     
   render() {
-    const {/* posts, */openFull,pathUrl,/* searchByTag, */ history,token}=this.props;
+    const {openFull,pathUrl,history,token}=this.props;
     const currentImage=this.state.post?this.state.post.resourceurl:"";
-    const postPreview=[this.state.prev[1],this.state.prev[0], {id: this.state.post.id, thumbnail: this.state.post.thumbnail},this.state.next[0],this.state.next[1]]
     return (
         <div ref={this.scrollRef} className={`postView`}>
-          <section id='postFeedSmall'>
-              {postPreview.map((post, index)=>
-                (post&&post.id)?
-                <PostItem 
-                  index={index} 
-                  key={`preview${post.id}${index}`} 
-                  post={post}
-                  pathUrl={pathUrl}
-                />:<div key={`preview${index}placeholder`}/>
-                )
-              }
-          </section>
+          
+          <PostPreview
+            pathUrl={pathUrl}
+            next={this.state.next}
+            prev={this.state.prev}
+            post={this.state.post}
+          />
+
           {this.state.post.id&&
           <div className={'imageWrapper'}>
             <img alt='no img' src={currentImage}/>
