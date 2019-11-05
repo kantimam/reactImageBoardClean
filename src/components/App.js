@@ -259,7 +259,7 @@ export default class ComponentName extends Component {
             this.loadingMore=true;
             axios.get(searchUrl, headers)
               .then(res=>{
-              this.setState({postsSearch:res.data.data, loading: false, error: false},
+              this.setState({postsSearch: res.data.data, loading: false, error: false},
                 ()=>{
                   this.loadingMore=false;
                 })

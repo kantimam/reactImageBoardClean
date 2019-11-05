@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PostRating from './postView/PostRating.js'
 import PostComments from './postView/PostComments.js'
-import PostItem from './PostItem.js';
 import CommentForm from './postView/CommentFormTwo.js'
 import PostNavigation from './PostNavigation.jsx';
 import axios from 'axios';

@@ -681,10 +681,6 @@ html, body {
   top: -1.4rem;
 }
 
-.uploadContainer {
-  margin-bottom: 14%;
-}
-
 .uploadComp {
   grid-column: 1/-1;
   display: -ms-grid;
