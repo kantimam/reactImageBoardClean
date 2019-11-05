@@ -32,8 +32,16 @@ export const getPost = (id) => dispatch => {
     } */
 }
 
-export function getNewPosts() {
 
+
+export const getNewPosts=()=>dispatch=> {
+  axios(`${BASEURL}/posts`)
+      .then(res =>
+          dispatch({
+              type: GET_NEW_POSTS,
+              payload: res.data
+          })
+      )
 }
 
 export function getUserPosts() {

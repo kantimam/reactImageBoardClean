@@ -1,8 +1,8 @@
 import {GET_POST, GET_NEW_POSTS} from '../actions/types';
 
 const initialState={
-    items: [],
-    item: {}
+    new: [],
+    current: {}
 }
 
 export default function(state=initialState, action){
@@ -10,7 +10,13 @@ export default function(state=initialState, action){
         case GET_POST: 
             return {
                 ...state,
-                items: action.payload
+                current: action.payload
+            }
+        case GET_NEW_POSTS:
+            console.log(action.payload)
+            return {
+                ...state,
+                new: action.payload
             }
         default:
             return state;
