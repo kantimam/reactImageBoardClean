@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import ImageBoard from './reactComponents/ImageBoard.js'
-import UserPage from './reactComponents/user/UserPage.js'
-import NavBar from './reactComponents/NavBar.js'
+import ImageBoard from './ImageBoard.js'
+import UserPage from './user/UserPage.js'
+import NavBar from './NavBar.js'
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import './scss/customStyles.css';
-import LogSignModal from './reactComponents/logSignModal.jsx';
+import LogSignModal from './logSignModal.jsx';
 import axios from 'axios';
-import FullScreenImage from './reactComponents/fullScreenImage.jsx';
-import UploadModal from './reactComponents/UploadModal.jsx';
+import FullScreenImage from './fullScreenImage.jsx';
+import UploadModal from './UploadModal.jsx';
+
+import {Provider} from 'react-redux';
+import store from '../store/store';
+
 const BASEURL=`${process.env.REACT_APP_BE_URL}`;
 
 
@@ -278,105 +282,64 @@ export default class ComponentName extends Component {
 
     render() {
         return (
-        <BrowserRouter>
-            <div className="App">
-                
-                <header className="App-header centerAll">
-                <div 
-                  onClick={()=>this.setState({mobileNavOpen: !this.state.mobileNavOpen})} 
-                  className='mobileToggle'
-                >
-                  X
-                </div>
-                <Route path="" render={(props)=>
-                    <NavBar
-                        mobileNavOpen={this.state.mobileNavOpen} 
-                        logOut={this.logOut} 
-                        loggedIn={this.state.loggedIn} 
-                        openLogSign={()=>this.setState({logSignOpen: true, mobileNavOpen: false})} 
-                        openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen,mobileNavOpen: false})} 
-                        {...props}
-                    />
-                }/>    
-                </header>
-                
-                {/* MAIN CONTAINER CORE CONTENT */}
-                <main ref={this.scrollRef}>
+        <Provider store={store}>
+          <BrowserRouter>
+              <div className="App">
                   
-                  {this.state.uploadOpen&&<UploadModal close={()=>this.setState({uploadOpen: false})} token={this.state.token}/>}
+                  <header className="App-header centerAll">
+                  <div 
+                    onClick={()=>this.setState({mobileNavOpen: !this.state.mobileNavOpen})} 
+                    className='mobileToggle'
+                  >
+                    X
+                  </div>
+                  <Route path="" render={(props)=>
+                      <NavBar
+                          mobileNavOpen={this.state.mobileNavOpen} 
+                          logOut={this.logOut} 
+                          loggedIn={this.state.loggedIn} 
+                          openLogSign={()=>this.setState({logSignOpen: true, mobileNavOpen: false})} 
+                          openUpload={()=>this.setState({uploadOpen:!this.state.uploadOpen,mobileNavOpen: false})} 
+                          {...props}
+                      />
+                  }/>    
+                  </header>
+                  
+                  {/* MAIN CONTAINER CORE CONTENT */}
+                  <main ref={this.scrollRef}>
+                    
+                    {this.state.uploadOpen&&<UploadModal close={()=>this.setState({uploadOpen: false})} token={this.state.token}/>}
 
-                  {/* Modal to login or sign up */}
-                  {this.state.logSignOpen&&<LogSignModal loggedIn={this.loggedIn} signedUp={""} close={()=>this.setState({logSignOpen: false})}/>}
-                  
-                  <Switch>
-                    {this.state.loggedIn && 
-                    <Route path='/profile' render={({history})=>
-                        <UserPage 
-                            token={this.state.token}
-                            history={history}
+                    {/* Modal to login or sign up */}
+                    {this.state.logSignOpen&&<LogSignModal loggedIn={this.loggedIn} signedUp={""} close={()=>this.setState({logSignOpen: false})}/>}
+                    
+                    <Switch>
+                      <Route path={"/"} render={({history})=>
+                          <ImageBoard 
+                            loadMore={this.loadMorePosts} 
+                            key='boardNew' 
+                            posts={this.state.posts} 
+                            getPosts={this.getNewPosts} 
+                            pathUrl="" 
+                            history={history} 
+                            token={this.state.token} 
                             openFull={this.fullScreenImage}
-                            loadMore={this.loadMorePostsUserFavorite} 
-                            posts={this.state.postsUserFavorite} 
-                            getUserPosts={this.getUserPosts}
-                            loggedOutByServer={this.loggedOutByServer} 
-                        />}
-                    />
-                    }  
-    
-                    <Route path={"/tag/:search"} render={({history, match})=>
-                        <ImageBoard 
-                          loadMore={this.loadMorePostsSearch} 
-                          key='boardTag' 
-                          posts={this.state.postsSearch} 
-                          getPosts={this.searchByTag} 
-                          pathUrl="/tag" 
-                          history={history} 
-                          match={match} 
-                          token={this.state.token}
-                          openFull={this.fullScreenImage}
-                          loggedOutByServer={this.loggedOutByServer} 
-                        />}
-                    />
+                            loggedOutByServer={this.loggedOutByServer}
+                          />
+                        }
+                      />
+                    </Switch>
+                  </main>
 
-                    <Route path={"/search/:search"} render={({history, match})=>
-                        <ImageBoard 
-                          loadMore={this.loadMorePostsSearch} 
-                          key='boardSearch' 
-                          posts={this.state.postsSearch} 
-                          getPosts={this.searchByString} 
-                          pathUrl="/search" 
-                          history={history} 
-                          match={match} token={this.state.token} 
-                          openFull={this.fullScreenImage}
-                          loggedOutByServer={this.loggedOutByServer}
-                        />}
+                  {this.state.fullScreenImage&&
+                    <FullScreenImage 
+                      imgSrc={this.state.fullScreenImage} 
+                      close={()=>this.setState({fullScreenImage:""})}
                     />
-
-                    <Route path={"/"} render={({history})=>
-                        <ImageBoard 
-                          loadMore={this.loadMorePosts} 
-                          key='boardNew' 
-                          posts={this.state.posts} 
-                          getPosts={this.getNewPosts} 
-                          pathUrl="" 
-                          history={history} 
-                          token={this.state.token} 
-                          openFull={this.fullScreenImage}
-                          loggedOutByServer={this.loggedOutByServer}
-                        />
-                      }
-                    />
-                  </Switch>
-                </main>
-
-                {this.state.fullScreenImage&&
-                  <FullScreenImage 
-                    imgSrc={this.state.fullScreenImage} 
-                    close={()=>this.setState({fullScreenImage:""})}
-                  />
-                }
-            </div>
-        </BrowserRouter>
+                  }
+              </div>
+          </BrowserRouter>
+        </Provider>
         );
     }
 }
