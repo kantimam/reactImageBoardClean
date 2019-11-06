@@ -683,8 +683,8 @@ html,body{
     .logSignSwitch{
         display: flex;
         overflow: hidden;
-        div{
-            background-color: $bgColor;
+        a{
+            
             width: 50%;
             text-align: center;
             box-sizing: border-box;
@@ -692,11 +692,15 @@ html,body{
             border-right: 1px solid $primary-light;
             border-left: 1px solid $primary-light;
             border-radius: 1rem 1rem 0 0;
-        }
-        .inactive{
+
             transform: scaleY(0.95) translateY(2px);
             border-bottom: 2px solid $primary-light;
             background-color: rgb(68, 68, 68);
+        }
+        .active{
+            transform: none;
+            border-bottom: none;
+            background-color: $bgColor;
         }
     }
 }

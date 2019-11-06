@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import WelcomeBanner from './userPage/WelcomeBanner.js'
 import CreatePost from './CreatePost.js'
-import ImageBoard from '../../reactComponents/ImageBoard.js'
+import ImageBoard from '../ImageBoard.js'
 
 export default class UserPage extends Component {
   constructor(props) {
