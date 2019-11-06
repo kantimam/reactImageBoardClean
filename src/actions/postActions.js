@@ -3,7 +3,6 @@ import axios from 'axios';
 const BASEURL = `${process.env.REACT_APP_BE_URL}`
 
 export const getPost = (id) => dispatch => {
-    console.log("fet")
     axios(`${BASEURL}/posts/${id}`)
         .then(res =>
             dispatch({

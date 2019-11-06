@@ -3,7 +3,7 @@ import ImageFeed from './ImageFeed.jsx';
 import {connect} from 'react-redux';
 import {getNewPosts} from '../actions/postActions';
 
-const NewPostsFeed = ({getNewPosts, posts}) => {
+const SearchPostsFeed = ({getNewPosts, posts}) => {
     useEffect(() => {
         if(posts.length===0){
             getNewPosts()
@@ -17,7 +17,7 @@ const NewPostsFeed = ({getNewPosts, posts}) => {
 }
 
 const mapStateToProps=state=>({
-    posts: state.posts.new
+    posts: state.posts.user
 });
 
-export default connect(mapStateToProps, {getNewPosts})(NewPostsFeed)
+export default connect(mapStateToProps, {getNewPosts})(SearchPostsFeed)

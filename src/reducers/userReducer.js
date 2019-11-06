@@ -1,8 +1,8 @@
 import {GET_POST, GET_NEW_POSTS} from '../actions/types';
 
 const initialState={
-    new: [],
-    current: {}
+    loggedIn: false,
+    token: null
 }
 
 export default function(state=initialState, action){

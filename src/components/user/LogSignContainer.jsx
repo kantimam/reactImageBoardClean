@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import LogIn from './LogIn.jsx';
 import SignUp from './SignUp.jsx';
-
+import {Route, Switch, NavLink} from 'react-router-dom';
 
 const LogSignContainer = ({loggedIn, signedUp}) => {
     const [logSignStatus, setStatus]=useState("logIn");
@@ -10,12 +10,15 @@ const LogSignContainer = ({loggedIn, signedUp}) => {
     return (
         <div className={'logSignContainer'}>
             <div className={'logSignSwitch pointer'}>
-                <div onClick={()=>setStatus("logIn")} className={logSignStatus==="signUp"?'inactive':""}>SIGN UP</div>
-                <div onClick={()=>setStatus("signUp")} className={logSignStatus==="logIn"?'inactive':""}>LOG IN</div>
+                <NavLink className="undecoratedLink" to="signup" activeClassName="active">SIGN UP</NavLink>
+                <NavLink className="undecoratedLink" to="login" activeClassName="active">LOG IN</NavLink>
             </div>
-            {logSignStatus==="logIn"?
-            <LogIn loggedIn/>:
-            <SignUp signedUp/>}
+            
+            <Switch>
+                <Route path={"*/login"} component={LogIn}/>
+                <Route path={"*/signup"} component={SignUp}/>
+            </Switch>
+            
         </div>
     )
 }

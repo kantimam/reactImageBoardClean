@@ -1,36 +1,46 @@
 import React from 'react'
 import Search from './Search.js'
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 
 
-const NavBar = ({history,openLogSign,logOut,loggedIn,openUpload,mobileNavOpen}) => {
-  const location=history.location.pathname;
+const NavBar = ({mobileNavOpen, loggedIn , location, history,  ...props}) => {
   return (
       <nav className={`mainNavBar noSelect ${mobileNavOpen? 'mobileNavOpen':'mobileNavClosed'}`}> 
 
-        <div className={'undecoratedLink centerAll pointer navItem'} onClick={openUpload}>UPLOAD</div>
-        <div className={`navItem centerAll ${location==="/popular"?"active":""}`}>
-          <Link className={`undecoratedLink`} to='/popular'>POPULAR</Link>
-        </div>
         
-        <div className={`navItem centerAll ${location==="/new"?"active":""}`}>
-          <Link className={`undecoratedLink`} to='/new'>NEW</Link>
-        </div>
+
+        <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to={`${location.pathname}/upload`}>
+          UPLOAD
+        </NavLink>
+
+        <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to="/popular">
+          POPULAR
+        </NavLink>
+
+        <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to="/new">
+          NEW
+        </NavLink>
+
+        
+
+
         
         <Search history={history}/>
 
         {loggedIn?
-          [<div key='navProfileButton' className={`navItem centerAll ${location==="/profile"?"active":""}`}>
-            <Link className={`undecoratedLink`} to='/profile'>
+          <>
+            <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to="/profile">
               PROFILE
-            </Link>
-          </div>,
-          <div key='navLogOutButton' onClick={logOut} className={`navItem centerAll logOutButton`}>
-            LOG OUT
-          </div>]:
-          <div onClick={openLogSign} className={"navItem centerAll pointer"}>LOG IN</div>
+            </NavLink>
+            <div key='navLogOutButton' /* onClick={logOut} */ className={`navItem centerAll logOutButton`}>
+              LOG OUT
+            </div>
+          </>:
+          <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to={`${location.pathname}/login`}>
+              LOG IN
+          </NavLink>
           }
-        {/* <div>SETTINGS</div> */}
+        
       </nav>
   )
 }
