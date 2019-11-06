@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import {useLocation, useParams} from 'react-router-dom';
-import {connect} from 'react-redux';
-import {getPost} from '../../actions/postActions'
+import { useLocation, useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getPost } from '../../actions/postActions'
 
 import PostRating from './postView/PostRating.js'
 import PostComments from './postView/PostComments.js'
@@ -10,43 +10,43 @@ import PostNavigation from './PostNavigation.jsx';
 import PostPreview from './PostPreview.jsx';
 
 
-const PostView = ({getPost, post}) => {
-  const params=useParams();
+const PostView = ({ getPost, post }) => {
+  const params = useParams();
   useEffect(() => {
     getPost(params.id || 0);
     return () => {
-      
+
     };
   }, [params])
 
   return (
     <div className={`postView`}>
-          
-    {/* <PostPreview
+
+      {/* <PostPreview
       next={this.state.next}
       prev={this.state.prev}
       post={this.state.post}
     /> */}
 
-    {
-    <div className={'imageWrapper'}>
-      {<img alt='no img' src={post.resourceurl}/>}
+      {
+        <div className={'imageWrapper'}>
+          {<img alt='no img' src={post.resourceurl} />}
 
-      <div /* onClick={()=>openFull(currentImage)} */ className={'fullScreenButton'}>
-        <i className="material-icons">
-          crop_free
+          <div /* onClick={()=>openFull(currentImage)} */ className={'fullScreenButton'}>
+            <i className="material-icons">
+              crop_free
         </i>
-      </div>
+          </div>
 
-      {/* <PostNavigation 
+          {/* <PostNavigation 
         getNextPost={this.getNextPost}
         getPrevPost={this.getPrevPost}
         next={this.state.next[0]}
         prev={this.state.prev[0]}
       /> */}
-    </div>}
-    
-    {/* <PostRating 
+        </div>}
+
+      {/* <PostRating 
       tags={this.state.post.tags}
       token={token}
       postId={this.state.postId}
@@ -68,15 +68,15 @@ const PostView = ({getPost, post}) => {
       postId={this.state.postId}
     /> */}
 
-  </div>   
+    </div>
   )
 }
 
-const mapStateToProps=state=>({
+const mapStateToProps = state => ({
   post: state.posts.current
 });
 
-export default connect(mapStateToProps, {getPost})(PostView)
+export default connect(mapStateToProps, { getPost })(PostView)
 
 
 
