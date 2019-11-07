@@ -20,7 +20,7 @@ export default class Search extends Component {
     }
     
   render() {
-    let searchActive=this.state.search.length>0? 'searchActive' : ''
+    const searchActive=this.state.search.length>0? 'searchActive' : ''
     return (
       <form onSubmit={this.onSubmit} className={`searchComp centerAll  ${searchActive}`}>
         <input name='search' onChange={this.onChange} value={this.state.search} className='searchInput' type='text'></input>

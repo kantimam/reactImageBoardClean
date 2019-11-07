@@ -1,23 +1,22 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import ImageFeed from './ImageFeed.jsx';
-import {connect} from 'react-redux';
-import {getNewPosts} from '../actions/postActions';
+import { connect } from 'react-redux';
+import { searchPosts } from '../actions/postActions';
 
-const SearchPostsFeed = ({getNewPosts, posts}) => {
+const SearchPostsFeed = ({ searchPosts, posts, match, searchMode}) => {
     useEffect(() => {
-        if(posts.length===0){
-            getNewPosts()
-        }
-    }, [])
-    
+        searchPosts(match.params.search, searchMode)
+        
+    }, [match.params])
+
     console.log(posts)
     return (
-        <ImageFeed posts={posts.data} pathUrl={""}/>
+        <ImageFeed posts={posts.data} pathUrl={""} />
     )
 }
 
-const mapStateToProps=state=>({
-    posts: state.posts.user
+const mapStateToProps = state => ({
+    posts: state.posts.search
 });
 
-export default connect(mapStateToProps, {getNewPosts})(SearchPostsFeed)
+export default connect(mapStateToProps, { searchPosts })(SearchPostsFeed)

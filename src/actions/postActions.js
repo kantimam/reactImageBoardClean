@@ -1,4 +1,4 @@
-import { GET_POST, GET_NEW_POSTS } from './types';
+import { GET_POST, GET_NEW_POSTS, SEARCH_POSTS } from './types';
 import axios from 'axios';
 const BASEURL = `${process.env.REACT_APP_BE_URL}`
 
@@ -45,4 +45,13 @@ export const getNewPosts=()=>dispatch=> {
 
 export function getUserPosts() {
 
+}
+
+export const searchPosts=(searchString, searchUrl="search")=>dispatch=>{
+  axios.get(`${BASEURL}/posts/${searchUrl}/${searchString}`)
+    .then(res=>
+      dispatch({
+        type: SEARCH_POSTS,
+        payload: res.data
+      }))
 }

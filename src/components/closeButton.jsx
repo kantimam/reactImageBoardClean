@@ -1,6 +1,6 @@
 import React from 'react'
 
-const CloseButton = ({onClick}) => {
+const CloseButton = ({ onClick }) => {
     return (
         <i onClick={onClick} className="material-icons closeButton">
             close

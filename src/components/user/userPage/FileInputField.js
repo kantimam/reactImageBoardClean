@@ -1,11 +1,11 @@
-import React, {useCallback} from 'react'
-import {useDropzone} from 'react-dropzone'
+import React, { useCallback } from 'react'
+import { useDropzone } from 'react-dropzone'
 
-export default function FileInputField({onFileSelect}) {
+export default function FileInputField({ onFileSelect }) {
   const onDrop = useCallback(acceptedFiles => {
     onFileSelect(acceptedFiles)
   }, [])
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
     <div className={'dragAndDrop centerAll'} {...getRootProps()}>
