@@ -1,13 +1,13 @@
-import {GET_POST, GET_NEW_POSTS} from '../actions/types';
+import {LOGIN, GET_NEW_POSTS} from '../actions/types';
 
 const initialState={
-    loggedIn: false,
+    user: {},
     token: null
 }
 
 export default function(state=initialState, action){
     switch(action.type){
-        case GET_POST:
+        case LOGIN:
             return {
                 ...state,
                 current: action.payload

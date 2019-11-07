@@ -3,3 +3,8 @@ export const GET_NEW_POSTS='GET_NEW_POSTS';
 export const SEARCH_POSTS="SEARCH_POSTS" 
 export const GET_USER_POSTS="GET_USER_POSTS"
 export const GET_FAVORITE_POSTS="GET_FAVORITE_POSTS"
+
+export const CREATE_COMMENT="CREATE_COMMENT"
+
+export const LOGIN="LOGIN"
+export const LOGOUT="LOGOUT"

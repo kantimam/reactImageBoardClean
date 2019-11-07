@@ -4,12 +4,13 @@ import {Link, NavLink} from 'react-router-dom'
 
 
 const NavBar = ({mobileNavOpen, loggedIn , location, history,  ...props}) => {
+  const relativeLink=(link)=>location.pathname==="/"? link : `${location.pathname}/${link}`;
   return (
       <nav className={`mainNavBar noSelect ${mobileNavOpen? 'mobileNavOpen':'mobileNavClosed'}`}> 
 
         
 
-        <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to={`${location.pathname}/upload`}>
+        <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to={relativeLink("upload")}>
           UPLOAD
         </NavLink>
 
@@ -36,7 +37,7 @@ const NavBar = ({mobileNavOpen, loggedIn , location, history,  ...props}) => {
               LOG OUT
             </div>
           </>:
-          <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to={`${location.pathname}/login`}>
+          <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to={relativeLink("login")}>
               LOG IN
           </NavLink>
           }
