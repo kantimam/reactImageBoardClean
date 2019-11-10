@@ -66,6 +66,10 @@ html, body {
   margin: 0 auto;
 }
 
+.centerText {
+  text-align: center;
+}
+
 .undecoratedLink {
   text-decoration: none;
   color: white;
@@ -92,6 +96,10 @@ html, body {
       grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
   grid-gap: 0.2rem;
   padding-bottom: 1rem;
+}
+
+#loading {
+  margin-top: 14rem;
 }
 
 .postItem {
