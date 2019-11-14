@@ -1,10 +1,11 @@
-import {GET_POST, GET_NEW_POSTS, SEARCH_POSTS, GET_USER_POSTS, GET_FAVORITE_POSTS} from '../actions/types';
+import {GET_POST, GET_NEW_POSTS, SEARCH_POSTS, GET_USER_POSTS, GET_FAVORITE_POSTS, SET_PREVIEW} from '../actions/types';
 
 const initialState={
     user: [],
     search: [],
     new: [],
-    current: {}
+    current: {},
+    preview: []
 }
 
 export default function(state=initialState, action){
@@ -34,6 +35,11 @@ export default function(state=initialState, action){
             return {
                 ...state,
                 favorite: action.payload
+            }
+        case SET_PREVIEW:
+            return {
+                ...state,
+                preview: action.payload,
             }
         default:
             return state;

@@ -1,26 +1,30 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getPost, getUserPosts } from '../../actions/postActions'
+import { getPostWithPreview } from '../../actions/postActions'
 
 import PostRating from './postView/PostRating.js'
 import PostComments from './postView/PostComments.js'
 import CommentForm from './postView/CommentFormTwo.js'
 import PostNavigation from './PostNavigation.jsx';
 import PostPreview from './PostPreview.jsx';
+import Image from './postView/Image';
 
 
-const PostView = ({ getPost, post, getUserPosts }) => {
+const PostView = ({ post, getPostWithPreview }) => {
   const params = useParams();
   useEffect(() => {
-    getPost(params.id || 0);
+    getPostWithPreview(params.id || 0, "new");
     return () => {
 
     };
   }, [params])
 
+  
+  if(post.id!=params.id) return null
+  
   return (
-    <div onClick={()=>getUserPosts("new" ,post.id)} className={`postView`}>
+    <div className={`postView`}>
 
       {/* <PostPreview
       next={this.state.next}
@@ -30,8 +34,7 @@ const PostView = ({ getPost, post, getUserPosts }) => {
 
       {
         <div className={'imageWrapper'}>
-          {<img alt='no img' src={post.resourceurl} />}
-
+          <Image post={post}/>
           <div /* onClick={()=>openFull(currentImage)} */ className={'fullScreenButton'}>
             <i className="material-icons">
               crop_free
@@ -76,7 +79,7 @@ const mapStateToProps = state => ({
   post: state.posts.current
 });
 
-export default connect(mapStateToProps, { getPost, getUserPosts })(PostView)
+export default connect(mapStateToProps, { getPostWithPreview })(PostView)
 
 
 

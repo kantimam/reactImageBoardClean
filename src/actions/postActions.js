@@ -1,12 +1,37 @@
 import {
   GET_POST,
   GET_NEW_POSTS,
-  SEARCH_POSTS
+  SEARCH_POSTS,
+  SET_PREVIEW
 } from './types';
 import axios from 'axios';
 const BASEURL = process.env.REACT_APP_BE_URL
 
+
+export const getPostWithPreview=(id, bucket)=> {
+  return (dispatch, getState)=>{
+    const {posts}=getState();
+    let postPreview=[];
+    if(posts[bucket] && posts[bucket].data && posts[bucket].data.length>0){
+      const currentPosts=posts[bucket].data;
+      const postId=currentPosts.findIndex((e)=>e.id==id);
+      postPreview=[currentPosts[postId-2],currentPosts[postId-1],currentPosts[postId],currentPosts[postId+1],currentPosts[postId+2]];
+    }
+    dispatch({
+      type: SET_PREVIEW,
+      payload: postPreview,
+    })
+    switch(bucket){
+      case "new":dispatch(getPost(id)); break;
+      case "search":dispatch(searchPosts(id)); break;
+      default: console.log("please check your route")
+    }
+
+  }
+}
+
 export const getPost = (id) => dispatch => {
+  console.log("get was called")
   axios(`${BASEURL}/posts/${id}`)
     .then(res =>
       dispatch({
@@ -46,18 +71,7 @@ export const getNewPosts = () => dispatch => {
     )
 }
 
-export function getUserPosts(bucket, id) {
-  return (dispatch, getState)=>{
-    const {posts}=getState();
-    if(posts[bucket] && posts[bucket].data && posts[bucket].data.length>0){
-      const currentPosts=posts[bucket].data;
-      const postId=currentPosts.findIndex((e)=>e.id===id);
-      const postPreview=[currentPosts[postId-2],currentPosts[postId-1],currentPosts[postId],currentPosts[postId+1],currentPosts[postId+2]];
 
-      console.log(postPreview, "/posts/id/nextPage")
-    }
-  }
-}
 
 export const searchPosts = (searchString, searchUrl = "search") => dispatch => {
   axios.get(`${BASEURL}/posts/${searchUrl}/${searchString}`)

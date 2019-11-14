@@ -252,6 +252,12 @@ html, body {
   margin: 0 auto;
 }
 
+.postView #placeholderImage {
+  width: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
 .postView p {
   margin: 0;
 }

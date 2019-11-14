@@ -185,6 +185,10 @@ html,body{
         display: block;
         margin: 0 auto;
     }
+    #placeholderImage{
+        width: 100%;
+        object-fit: contain;
+    }
     p{
         margin: 0;
     }
