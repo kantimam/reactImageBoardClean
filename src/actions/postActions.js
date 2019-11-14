@@ -36,7 +36,6 @@ export const getPost = (id) => dispatch => {
 }
 
 
-
 export const getNewPosts = () => dispatch => {
   axios(`${BASEURL}/posts`)
     .then(res =>
@@ -47,8 +46,17 @@ export const getNewPosts = () => dispatch => {
     )
 }
 
-export function getUserPosts() {
+export function getUserPosts(bucket, id) {
+  return (dispatch, getState)=>{
+    const {posts}=getState();
+    if(posts[bucket] && posts[bucket].data && posts[bucket].data.length>0){
+      const currentPosts=posts[bucket].data;
+      const postId=currentPosts.findIndex((e)=>e.id===id);
+      const postPreview=[currentPosts[postId-2],currentPosts[postId-1],currentPosts[postId],currentPosts[postId+1],currentPosts[postId+2]];
 
+      console.log(postPreview, "/posts/id/nextPage")
+    }
+  }
 }
 
 export const searchPosts = (searchString, searchUrl = "search") => dispatch => {

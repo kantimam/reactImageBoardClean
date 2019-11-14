@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getPost } from '../../actions/postActions'
+import { getPost, getUserPosts } from '../../actions/postActions'
 
 import PostRating from './postView/PostRating.js'
 import PostComments from './postView/PostComments.js'
@@ -10,7 +10,7 @@ import PostNavigation from './PostNavigation.jsx';
 import PostPreview from './PostPreview.jsx';
 
 
-const PostView = ({ getPost, post }) => {
+const PostView = ({ getPost, post, getUserPosts }) => {
   const params = useParams();
   useEffect(() => {
     getPost(params.id || 0);
@@ -20,7 +20,7 @@ const PostView = ({ getPost, post }) => {
   }, [params])
 
   return (
-    <div className={`postView`}>
+    <div onClick={()=>getUserPosts("new" ,post.id)} className={`postView`}>
 
       {/* <PostPreview
       next={this.state.next}
@@ -76,7 +76,7 @@ const mapStateToProps = state => ({
   post: state.posts.current
 });
 
-export default connect(mapStateToProps, { getPost })(PostView)
+export default connect(mapStateToProps, { getPost, getUserPosts })(PostView)
 
 
 

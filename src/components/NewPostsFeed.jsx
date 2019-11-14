@@ -10,7 +10,6 @@ const NewPostsFeed = ({getNewPosts, posts}) => {
         }
     }, [])
     
-    console.log(posts)
     return (
         <ImageFeed posts={posts.data} pathUrl={""}/>
     )
