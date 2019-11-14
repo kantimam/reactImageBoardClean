@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import store from '../store/store';
 import NewPostsFeed from './NewPostsFeed.jsx';
 import SearchPostsFeed from './SearchPostsFeed.jsx';
-import PostView from './posts/PostView';
+import PostView from './posts/PostView.jsx';
 
 
 

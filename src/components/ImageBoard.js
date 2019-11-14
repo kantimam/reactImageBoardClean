@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PostItem from './posts/PostItem.js'
-import PostView from './posts/PostView.js'
+import PostView from './posts/PostView.jsx'
 import {Route, Switch} from 'react-router-dom';
 
 export default class ImageBoard extends Component {

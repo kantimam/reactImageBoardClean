@@ -3,7 +3,6 @@ import PostItem from './posts/PostItem'
 
 
 const ImageFeed = ({ posts, pathUrl }) => {
-    console.log(posts);
 
     /* handle loading */
     if (!posts || posts.length === 0) {
