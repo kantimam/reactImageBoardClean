@@ -55,6 +55,8 @@ html,body{
     user-select: none;
 }
 
+
+
 #imageBoard{
     width: 100%;
     max-width:  $containerWidth;
@@ -63,6 +65,14 @@ html,body{
     grid-template-columns: repeat(auto-fill,minmax(15rem, 1fr));
     grid-gap: 0.2rem;
     padding-bottom: 1rem;
+}
+#loadingComponent{
+    width: 8rem;
+    margin: 5rem auto 0 auto;
+    img{
+        margin-left: 0.5rem;
+        width: 100%;
+    }
 }
 
 #loading{

@@ -8,10 +8,11 @@ import PostComments from './postView/PostComments.js'
 import CommentForm from './postView/CommentFormTwo.js'
 import PostNavigation from './PostNavigation.jsx';
 import PostPreview from './PostPreview.jsx';
-import Image from './postView/Image';
+import Loading from '../loading';
 
 
 const PostView = ({ post, getPostWithPreview }) => {
+  const [loading, setLoad]=useState(false);
   const params = useParams();
   useEffect(() => {
     getPostWithPreview(params.id || 0, "new");
@@ -21,7 +22,7 @@ const PostView = ({ post, getPostWithPreview }) => {
   }, [params])
 
   
-  if(post.id!=params.id) return null
+  if(!post || post.id!=params.id) return <Loading/>
   
   return (
     <div className={`postView`}>
@@ -34,7 +35,7 @@ const PostView = ({ post, getPostWithPreview }) => {
 
       {
         <div className={'imageWrapper'}>
-          <Image post={post}/>
+          <img alt='no img' src={post.resourceurl}/>
           <div /* onClick={()=>openFull(currentImage)} */ className={'fullScreenButton'}>
             <i className="material-icons">
               crop_free

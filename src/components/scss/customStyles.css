@@ -98,6 +98,16 @@ html, body {
   padding-bottom: 1rem;
 }
 
+#loadingComponent {
+  width: 8rem;
+  margin: 5rem auto 0 auto;
+}
+
+#loadingComponent img {
+  margin-left: 0.5rem;
+  width: 100%;
+}
+
 #loading {
   margin-top: 14rem;
 }
