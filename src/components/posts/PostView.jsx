@@ -11,46 +11,46 @@ import PostPreview from './PostPreview.jsx';
 import Loading from '../loading';
 
 
-const PostView = ({ post, getPostWithPreview }) => {
-  const [loading, setLoad]=useState(false);
+const PostView = ({ post, preview, getPostWithPreview }) => {
+  const [loading, setLoad] = useState(false);
   const params = useParams();
   useEffect(() => {
     getPostWithPreview(params.id || 0, "new");
+    /* if there is no post after 1 second show the loading indicator */
+    const loadingFallback = setTimeout(() => {
+      if (!post || !post.thumbnail) setLoad(true);
+    }, 1000)
     return () => {
-
+      clearTimeout(loadingFallback);
     };
   }, [params])
 
-  
-  if(!post || post.id!=params.id) return <Loading/>
-  
+
+  /*   if (!post || post.id != params.id) return loading ? <Loading /> : null
+   */
   return (
     <div className={`postView`}>
+      <PostPreview preview={preview} />
 
-      {/* <PostPreview
-      next={this.state.next}
-      prev={this.state.prev}
-      post={this.state.post}
-    /> */}
+      {((!post || post.id != params.id) && loading) ? <Loading /> :
+        <>
+          <div className={'imageWrapper'}>
+            <img alt='no img' src={post.resourceurl} />
+            <div /* onClick={()=>openFull(currentImage)} */ className={'fullScreenButton'}>
+              <i className="material-icons">
+                crop_free
+              </i>
+            </div>
 
-      {
-        <div className={'imageWrapper'}>
-          <img alt='no img' src={post.resourceurl}/>
-          <div /* onClick={()=>openFull(currentImage)} */ className={'fullScreenButton'}>
-            <i className="material-icons">
-              crop_free
-        </i>
+            {/* <PostNavigation
+              getNextPost={this.getNextPost}
+              getPrevPost={this.getPrevPost}
+              next={this.state.next[0]}
+              prev={this.state.prev[0]}
+            /> */}
           </div>
 
-          {/* <PostNavigation 
-        getNextPost={this.getNextPost}
-        getPrevPost={this.getPrevPost}
-        next={this.state.next[0]}
-        prev={this.state.prev[0]}
-      /> */}
-        </div>}
-
-      {/* <PostRating 
+          {/* <PostRating 
       tags={this.state.post.tags}
       token={token}
       postId={this.state.postId}
@@ -71,13 +71,16 @@ const PostView = ({ post, getPostWithPreview }) => {
       comments={this.state.post.comments}
       postId={this.state.postId}
     /> */}
+        </>}
+
 
     </div>
   )
 }
 
 const mapStateToProps = state => ({
-  post: state.posts.current
+  post: state.posts.current,
+  preview: state.posts.preview
 });
 
 export default connect(mapStateToProps, { getPostWithPreview })(PostView)

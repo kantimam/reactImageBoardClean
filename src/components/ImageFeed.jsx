@@ -1,15 +1,13 @@
 import React from 'react'
 import PostItem from './posts/PostItem'
-
+import Loading from './loading'
 
 const ImageFeed = ({ posts, pathUrl }) => {
 
     /* handle loading */
     if (!posts || posts.length === 0) {
         return (
-            <div id="loading" className={'centerText'}>
-                LOADING
-            </div>
+            <Loading/>
         )
     }
 
