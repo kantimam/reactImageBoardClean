@@ -15,7 +15,10 @@ const PostView = ({ post, preview, getPostWithPreview }) => {
   const [loading, setLoad] = useState(false);
   const params = useParams();
   useEffect(() => {
-    getPostWithPreview(params.id || 0, "new");
+    if(setLoad){
+      setLoad(false)
+    }
+    getPostWithPreview(params.id || 0, params.from);
     /* if there is no post after 1 second show the loading indicator */
     const loadingFallback = setTimeout(() => {
       if (!post || !post.thumbnail) setLoad(true);
@@ -30,7 +33,7 @@ const PostView = ({ post, preview, getPostWithPreview }) => {
    */
   return (
     <div className={`postView`}>
-      <PostPreview preview={preview} />
+      <PostPreview preview={preview} pathUrl={params.from}/>
 
       {((!post || post.id != params.id) && loading) ? <Loading /> :
         <>
@@ -42,35 +45,30 @@ const PostView = ({ post, preview, getPostWithPreview }) => {
               </i>
             </div>
 
-            {/* <PostNavigation
-              getNextPost={this.getNextPost}
-              getPrevPost={this.getPrevPost}
-              next={this.state.next[0]}
-              prev={this.state.prev[0]}
-            /> */}
+            {<PostNavigation
+              preview={preview}
+            />}
           </div>
 
-          {/* <PostRating 
-      tags={this.state.post.tags}
-      token={token}
-      postId={this.state.postId}
-      rating={this.state.rating}
-      vote={this.state.vote}
-      favorite={this.state.favorite}
-      toggleFavorite={this.toggleFavorite}
-      ratePost={this.ratePost}
-      history={history}
-    />
-    
-    <CommentForm 
-      currentPost={this.state.post.id}
-      refreshPost={()=>this.getPost(this.state.postId)}
-      token={token}
-    />
-    <PostComments 
-      comments={this.state.post.comments}
-      postId={this.state.postId}
-    /> */}
+          {/* <PostRating
+            tags={this.state.post.tags}
+            postId={this.state.postId}
+            rating={this.state.rating}
+            vote={this.state.vote}
+            favorite={this.state.favorite}
+            toggleFavorite={this.toggleFavorite}
+            ratePost={this.ratePost}
+            history={history}
+          />
+
+          <CommentForm
+            currentPost={this.state.post.id}
+            refreshPost={() => this.getPost(this.state.postId)}
+          />
+          <PostComments
+            comments={this.state.post.comments}
+            postId={this.state.postId}
+          /> */}
         </>}
 
 

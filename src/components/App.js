@@ -11,7 +11,7 @@ import UploadModal from './UploadModal.jsx';
 
 import { Provider } from 'react-redux';
 import store from '../store/store';
-import NewPostsFeed from './NewPostsFeed.jsx';
+import {NewPostsFeed} from './PostsFeed.jsx';
 import SearchPostsFeed from './SearchPostsFeed.jsx';
 import PostView from './posts/PostView.jsx';
 
@@ -97,11 +97,12 @@ export default class ComponentName extends Component {
               {this.state.logSignOpen && <LogSignModal loggedIn={this.loggedIn} signedUp={""} close={() => this.setState({ logSignOpen: false })} />}
 
               <Switch>
-                <Route path={"*/post/:id"} component={PostView} />
+                <Route path={"/:from(new|popular|search|favorite|user)/post/:id"} component={PostView} />
+                {/* <Route path={"/:from(new|popular|favorite|user)?"} component={PostsFeed} /> */}
                 <Route path={"/search/:search"} render={(props)=><SearchPostsFeed {...props} searchMode="search"/>} />
                 <Route path={"/searchstrict/:search"} render={(props)=><SearchPostsFeed {...props} searchMode="searchstrict"/>} />
                 <Route path={"/tags/:search"} render={(props)=><SearchPostsFeed {...props} searchMode="tag"/>} />
-                <Route path={"/"} component={NewPostsFeed} />
+                <Route path={["/","/new"]} component={NewPostsFeed} />
               </Switch>
             </main>
 

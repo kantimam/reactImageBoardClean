@@ -11,8 +11,8 @@ const SearchPostsFeed = ({ searchPosts, posts, match, searchMode}) => {
 
     console.log(posts)
     return (
-        <ImageFeed posts={posts.data} pathUrl={""} />
-    )
+        <ImageFeed posts={posts.data} pathUrl={"search"} />
+    )   
 }
 
 const mapStateToProps = state => ({

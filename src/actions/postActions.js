@@ -1,32 +1,36 @@
 import {
   GET_POST,
   GET_NEW_POSTS,
+  GET_POPULAR_POSTS,
   SEARCH_POSTS,
+  GET_FAVORITE_POSTS,
+  GET_USER_POSTS,
   SET_PREVIEW
 } from './types';
 import axios from 'axios';
 const BASEURL = process.env.REACT_APP_BE_URL
 
 
-export const getPostWithPreview=(id, bucket)=> {
-  return (dispatch, getState)=>{
-    const {posts}=getState();
-    let postPreview=[];
-    if(posts[bucket] && posts[bucket].data && posts[bucket].data.length>0){
-      const currentPosts=posts[bucket].data;
-      const postId=currentPosts.findIndex((e)=>e.id==id);
-      postPreview=[currentPosts[postId-2],currentPosts[postId-1],currentPosts[postId],currentPosts[postId+1],currentPosts[postId+2]];
-    }
-    dispatch({
-      type: SET_PREVIEW,
-      payload: postPreview,
-    })
-    switch(bucket){
-      case "new":dispatch(getPost(id)); break;
-      case "search":dispatch(searchPosts(id)); break;
-      default: console.log("please check your route")
-    }
 
+export const getPostWithPreview = (id, bucket) => {
+  return (dispatch, getState) => {
+    const {posts} = getState();
+    if (posts[bucket]) {
+      let postPreview = [];
+      if (posts[bucket].data && posts[bucket].data.length > 0) {
+        const currentPosts = posts[bucket].data;
+        const postId = currentPosts.findIndex((e) => e.id == id);
+        postPreview = [currentPosts[postId - 2], currentPosts[postId - 1], currentPosts[postId], currentPosts[postId + 1], currentPosts[postId + 2]];
+      }
+      dispatch({
+        type: SET_PREVIEW,
+        payload: postPreview,
+      })
+      if(bucket==="search") return dispatch(searchPosts(id));
+      dispatch(getPost(id));
+    }else{
+      console.log("please check your route")
+    }
   }
 }
 
@@ -60,6 +64,43 @@ export const getPost = (id) => dispatch => {
   } */
 }
 
+export const getPosts = (from) => dispatch => {
+  axios(`${BASEURL}/posts/${from}`)
+    .then(res => {
+      switch (from) {
+        case "popular": {
+          dispatch({
+            type: GET_POPULAR_POSTS,
+            payload: res.data
+          });
+          break;
+        }
+        case "user": {
+          dispatch({
+            type: GET_USER_POSTS,
+            payload: res.data
+          });
+          break;
+        }
+        case "favorite": {
+          dispatch({
+            type: GET_FAVORITE_POSTS,
+            payload: res.data
+          });
+          break;
+        }
+        default:
+          dispatch({
+            type: GET_NEW_POSTS,
+            payload: res.data
+          })
+      }
+
+    })
+
+
+}
+
 
 export const getNewPosts = () => dispatch => {
   axios(`${BASEURL}/posts`)
@@ -71,6 +112,16 @@ export const getNewPosts = () => dispatch => {
     )
 }
 
+
+export const getNextPosts = () => dispatch => {
+  axios(`${BASEURL}/posts`)
+    .then(res =>
+      dispatch({
+        type: GET_NEW_POSTS,
+        payload: res.data
+      })
+    )
+}
 
 
 export const searchPosts = (searchString, searchUrl = "search") => dispatch => {
