@@ -8,9 +8,9 @@ import LogSignModal from './logSignModal.jsx';
 import axios from 'axios';
 import FullScreenImage from './fullScreenImage.jsx';
 import UploadModal from './UploadModal.jsx';
+import { connect } from 'react-redux'
 
-import { Provider } from 'react-redux';
-import store from '../store/store';
+
 import {NewPostsFeed} from './PostsFeed.jsx';
 import SearchPostsFeed from './SearchPostsFeed.jsx';
 import PostView from './posts/PostView.jsx';
@@ -18,7 +18,7 @@ import PostView from './posts/PostView.jsx';
 
 
 
-export default class ComponentName extends Component {
+class App extends Component {
   constructor(props) {
     super(props)
     this.scrollRef = React.createRef();
@@ -61,8 +61,9 @@ export default class ComponentName extends Component {
 
 
   render() {
+    const {fullscreen}=this.props;
     return (
-      <Provider store={store}>
+      
         <BrowserRouter>
           <div className="App">
 
@@ -106,15 +107,13 @@ export default class ComponentName extends Component {
               </Switch>
             </main>
 
-            {this.state.fullScreenImage &&
-              <FullScreenImage
-                imgSrc={this.state.fullScreenImage}
-                close={() => this.setState({ fullScreenImage: "" })}
-              />
-            }
+            
+            {fullscreen&&<FullScreenImage/>}
+            
           </div>
         </BrowserRouter>
-      </Provider>
     );
   }
 }
+
+export default connect((state)=>({fullscreen:state.ui.fullscreen}))(App)

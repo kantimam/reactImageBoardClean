@@ -10,3 +10,5 @@ export const CREATE_COMMENT="CREATE_COMMENT"
 
 export const LOGIN="LOGIN"
 export const LOGOUT="LOGOUT"
+
+export const TOGGLE_FULLSCREEN="TOGGLE_FULLSCREEN"

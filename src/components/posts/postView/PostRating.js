@@ -1,6 +1,7 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
-const PostRating = ({vote, ratePost, postId, token, history, tags, rating, favorite, toggleFavorite/* , searchByTag */}) => {
+const PostRating = ({vote, ratePost, postId, token, tags, rating, favorite, toggleFavorite/* , searchByTag */}) => {
   return (
     <div className={"ratings"}>
         {token?
@@ -42,7 +43,7 @@ const PostRating = ({vote, ratePost, postId, token, history, tags, rating, favor
         
         <div className={'postTags'}>
           {tags&&tags.map((tag, index)=>
-            <p key={`tags${postId}${index}`} onClick={()=>history.push(`/tag/${tag.name}`)} className={'tag pointer'}>{tag.name}</p>
+            <Link key={`tags${postId}${index}`} to={`/tag/${tag.name}`} className={'tag pointer undecoratedLink'}>{tag.name}</Link>
           )}          
         </div>
         

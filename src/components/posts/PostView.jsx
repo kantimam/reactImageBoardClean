@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getPostWithPreview } from '../../actions/postActions'
-
+import { getPostWithPreview, getPost } from '../../actions/postActions'
+import { toggleFullscreen } from '../../actions/uiActions'
 import PostRating from './postView/PostRating.js'
 import PostComments from './postView/PostComments.js'
 import CommentForm from './postView/CommentFormTwo.js'
@@ -11,7 +11,7 @@ import PostPreview from './PostPreview.jsx';
 import Loading from '../loading';
 
 
-const PostView = ({ post, preview, getPostWithPreview }) => {
+const PostView = ({ post, preview, getPostWithPreview, getPost, toggleFullscreen }) => {
   const [loading, setLoad] = useState(false);
   const params = useParams();
   useEffect(() => {
@@ -39,7 +39,7 @@ const PostView = ({ post, preview, getPostWithPreview }) => {
         <>
           <div className={'imageWrapper'}>
             <img alt='no img' src={post.resourceurl} />
-            <div /* onClick={()=>openFull(currentImage)} */ className={'fullScreenButton'}>
+            <div onClick={()=>toggleFullscreen()} className={'fullScreenButton'}>
               <i className="material-icons">
                 crop_free
               </i>
@@ -50,25 +50,24 @@ const PostView = ({ post, preview, getPostWithPreview }) => {
             />}
           </div>
 
-          {/* <PostRating
-            tags={this.state.post.tags}
-            postId={this.state.postId}
-            rating={this.state.rating}
-            vote={this.state.vote}
-            favorite={this.state.favorite}
-            toggleFavorite={this.toggleFavorite}
-            ratePost={this.ratePost}
-            history={history}
-          />
+          {<PostRating
+            tags={post.tags}
+            postId={post.id}
+            rating={post.rating}
+            /* vote={this.state.vote} */
+            favorite={post.favorite}
+            /* toggleFavorite={this.toggleFavorite} */
+           /*  ratePost={this.ratePost} */
+          />}
 
           <CommentForm
-            currentPost={this.state.post.id}
-            refreshPost={() => this.getPost(this.state.postId)}
+            currentPost={post.id}
+            refreshPost={()=>getPost(params.id)}
           />
           <PostComments
-            comments={this.state.post.comments}
-            postId={this.state.postId}
-          /> */}
+            comments={post.comments}
+            postId={post.id}
+          /> 
         </>}
 
 
@@ -81,7 +80,7 @@ const mapStateToProps = state => ({
   preview: state.posts.preview
 });
 
-export default connect(mapStateToProps, { getPostWithPreview })(PostView)
+export default connect(mapStateToProps, { getPostWithPreview, getPost, toggleFullscreen })(PostView)
 
 
 

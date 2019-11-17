@@ -64,45 +64,38 @@ export const getPost = (id) => dispatch => {
   } */
 }
 
-export const getPosts = (from) => dispatch => {
-  axios(`${BASEURL}/posts/${from}`)
-    .then(res => {
-      switch (from) {
-        case "popular": {
-          dispatch({
-            type: GET_POPULAR_POSTS,
-            payload: res.data
-          });
-          break;
-        }
-        case "user": {
-          dispatch({
-            type: GET_USER_POSTS,
-            payload: res.data
-          });
-          break;
-        }
-        case "favorite": {
-          dispatch({
-            type: GET_FAVORITE_POSTS,
-            payload: res.data
-          });
-          break;
-        }
-        default:
-          dispatch({
-            type: GET_NEW_POSTS,
-            payload: res.data
-          })
-      }
 
-    })
-
-
-}
 
 
 export const getNewPosts = () => dispatch => {
+  axios(`${BASEURL}/posts`)
+    .then(res =>
+      dispatch({
+        type: GET_NEW_POSTS,
+        payload: res.data
+      })
+    )
+}
+
+export const getPopularPosts = () => dispatch => {
+  axios(`${BASEURL}/posts`)
+    .then(res =>
+      dispatch({
+        type: GET_NEW_POSTS,
+        payload: res.data
+      })
+    )
+}
+export const getFavoritePosts = () => dispatch => {
+  axios(`${BASEURL}/posts`)
+    .then(res =>
+      dispatch({
+        type: GET_NEW_POSTS,
+        payload: res.data
+      })
+    )
+}
+export const getUserPosts = () => dispatch => {
   axios(`${BASEURL}/posts`)
     .then(res =>
       dispatch({

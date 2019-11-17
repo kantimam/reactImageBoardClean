@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import FullScreenModal from './FullScreenModal.js';
 import CloseButton from './closeButton.jsx';
+import { toggleFullscreen } from '../actions/uiActions.js';
+import { connect } from 'react-redux'
 
-const FullScreenImage = ({ imgSrc, close }) => {
+
+const FullScreenImage = ({ imgSrc, toggleFullscreen }) => {
     const [zoom, setZoom] = useState(false);
 
     return (
@@ -17,9 +20,9 @@ const FullScreenImage = ({ imgSrc, close }) => {
             <div className={"centerAll shortInfo"}>
                 <p>CLICK THE PICTURE AGAIN TO ZOOM IN!</p>
             </div>
-            <CloseButton onClick={close} />
+            <CloseButton onClick={toggleFullscreen} />
         </FullScreenModal>
     )
 }
 
-export default FullScreenImage
+export default connect((state)=>({imgSrc: state.posts.current.resourceurl}),{toggleFullscreen})(FullScreenImage)
