@@ -68,7 +68,8 @@ export default function (state = initialState, action) {
                                 case NEXT_NEW_POSTS:
                                     return {
                                         ...state,
-                                        new: {...action.payload, data: [...state.new.data, ...action.payload.data]}
+                                        /* a1.splice(2, 0, ...a2); */
+                                        new: {...action.payload, data: state.new.data.splice(action.insertPos, 0, ...action.payload.data)}
                                     }
                                     default:
                                         return state;

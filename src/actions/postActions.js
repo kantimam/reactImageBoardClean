@@ -28,22 +28,49 @@ export const getPostWithPreview = (id, bucket) => {
       posts
     } = getState();
     if (posts[bucket]) {
-      dispatch(getPost(id));
       if (posts[bucket].data && posts[bucket].data.length > 0) {
+        dispatch(getPost(id));
         const currentPosts = posts[bucket].data;
         const postId = currentPosts.findIndex((e) => e.id == id);
-        console.log(currentPosts)
-        if (postId < 2) dispatch(getPrevPage(posts[bucket].prev_page_url, bucket))
-        if (postId > currentPosts.length - 2) dispatch(getNextPage(posts[bucket].next_page_url, bucket))
+        if (postId >= 0) {
+          /* if the post was found in the current data */
 
-        console.log(getState())
-        dispatch(getPreview(currentPosts, postId))
-
+          /* check if the prev page needs to be loaded */
+          if (postId < 2) dispatch(getPrevPage(posts[bucket].prev_page_url, currentPosts.length))
+          /* check if the next page has to be loaded */
+          if (postId > currentPosts.length - 2) dispatch(getNextPage(posts[bucket].next_page_url, currentPosts.length))
+        }
+        /* if post is not in the data get the page containing the post from backend */
+        else return dispatch(getPageWithPost(id, bucket));
       }
-
+      /* if data is empty get page containing the post */
+      else return dispatch(getPageWithPost(id, bucket));
     } else {
       console.log("please check your route")
     }
+  }
+}
+
+
+const getPageWithPost = (id, bucket) => {
+  switch (bucket) {
+    case "new":
+      getNewPosts(id);
+      break;
+    case "popular":
+      getPopularPosts(id);
+      break;
+    case "search":
+      searchPosts(id);
+      break;
+    case "user":
+      getUserPosts(id);
+      break;
+    case "favorite":
+      getFavoritePosts(id);
+      break;
+    default:
+      return;
   }
 }
 
@@ -56,30 +83,28 @@ const getPreview = (currentPosts, postId) => dispatch => {
   })
 }
 
-export const getNextPage = (url, bucket) => {
+export const getNextPage = (url, bucket, bucketSize) => {
   console.log("get next page")
   if (url) {
     axios(url)
       .then(res => {
-          dispatchNewer(bucket, res.data)
-        }
-      )
+        dispatchNewer(bucket, res.data, bucketSize)
+      })
   }
 }
 
 
-export const getPrevPage = (url, bucket) => {
+export const getPrevPage = (url, bucket, bucketSize) => {
   if (url) {
     axios(url)
       .then(res => {
-          dispatchOlder(bucket, res.data)
-        }
-      )
+        dispatchOlder(bucket, res.data, bucketSize)
+      })
   }
 
 }
 
-const dispatchNewer = (bucket, data) => dispatch => {
+const dispatchNewer = (bucket, data, bucketSize) => dispatch => {
   let type;
   switch (bucket) {
     case "new":
@@ -102,10 +127,11 @@ const dispatchNewer = (bucket, data) => dispatch => {
   }
   dispatch({
     type: type,
-    payload: data
+    payload: data,
+    insertPos: bucketSize
   })
 }
-const dispatchOlder = (bucket, data) => dispatch => {
+const dispatchOlder = (bucket, data, bucketSize) => dispatch => {
   let type;
   switch (bucket) {
     case "new":
@@ -128,7 +154,8 @@ const dispatchOlder = (bucket, data) => dispatch => {
   }
   dispatch({
     type: type,
-    payload: data
+    payload: data,
+    insertPos: bucketSize
   })
 }
 
@@ -147,7 +174,7 @@ export const getPost = (id) => dispatch => {
 
 
 
-export const getNewPosts = () => dispatch => {
+export const getNewPosts = (postOffset) => dispatch => {
   axios(`${BASEURL}/posts`)
     .then(res =>
       dispatch({
@@ -157,7 +184,7 @@ export const getNewPosts = () => dispatch => {
     )
 }
 
-export const getPopularPosts = () => dispatch => {
+export const getPopularPosts = (postOffset) => dispatch => {
   axios(`${BASEURL}/posts`)
     .then(res =>
       dispatch({
@@ -166,7 +193,7 @@ export const getPopularPosts = () => dispatch => {
       })
     )
 }
-export const getFavoritePosts = () => dispatch => {
+export const getFavoritePosts = (postOffset) => dispatch => {
   axios(`${BASEURL}/posts`)
     .then(res =>
       dispatch({
@@ -175,7 +202,7 @@ export const getFavoritePosts = () => dispatch => {
       })
     )
 }
-export const getUserPosts = () => dispatch => {
+export const getUserPosts = (postOffset) => dispatch => {
   axios(`${BASEURL}/posts`)
     .then(res =>
       dispatch({
@@ -186,7 +213,7 @@ export const getUserPosts = () => dispatch => {
 }
 
 
-export const getNextPosts = () => dispatch => {
+export const getNextPosts = (postOffset) => dispatch => {
   axios(`${BASEURL}/posts`)
     .then(res =>
       dispatch({
