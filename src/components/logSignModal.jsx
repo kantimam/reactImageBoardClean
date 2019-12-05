@@ -5,7 +5,7 @@ import LogSignContainer from './user/LogSignContainer.jsx'
 const LogSignModal = ({ loggedIn, signedUp, close, history }) => {
     return (
         <div className={"animatedModal centerAll"}>
-            <div className={"innerContent  fixHeightNoBorder"}>
+            <div className={"innerContent  fixHeightNoBorder logSignModal"}>
                 <CloseButton onClick={history.goBack} />
                 <LogSignContainer
 

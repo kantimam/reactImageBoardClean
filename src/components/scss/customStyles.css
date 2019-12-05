@@ -660,6 +660,7 @@ html, body {
 }
 
 .closeButton {
+  z-index: 4;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -668,7 +669,7 @@ html, body {
   background-color: #805acb;
   padding: 0.6rem;
   border-radius: 50%;
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   position: absolute;
   border: 1px solid #e7b9ff;
   -webkit-transition: 0.2s;
@@ -689,20 +690,27 @@ html, body {
 }
 
 .animatedModal .innerContent {
+  z-index: 4;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 94%;
   -webkit-animation: slideInFromTop 0.4s ease-in-out;
           animation: slideInFromTop 0.4s ease-in-out;
-  max-width: 84rem !important;
   border-radius: 1rem;
   border: 1px solid #e7b9ff;
   background-color: #2e3035;
   /* width: 100%;  mobile*/
-  padding: 2rem;
+  padding: 2rem 0;
   position: relative;
 }
 
 .animatedModal .closeButton {
   right: -1.4rem;
   top: -1.4rem;
+}
+
+.uploadContainer {
+  max-width: 80rem;
 }
 
 .uploadComp {
@@ -783,7 +791,15 @@ html, body {
     background-color: orange;
     border-radius: 2rem;
 } */
+.commentSection {
+  margin: 0 auto;
+  width: 94%;
+  max-width: 80rem;
+}
+
 .commentCell {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   width: 100%;
   border: 1px solid #e7b9ff;
   border-radius: 0.4rem;
@@ -814,8 +830,9 @@ html, body {
 }
 
 .commentFormSimple {
-  margin-top: 3rem;
-  width: 100%;
+  margin: 3rem auto 0 auto;
+  width: 94%;
+  max-width: 80rem;
 }
 
 .commentFormSimple .commentInfo {
@@ -884,6 +901,10 @@ html, body {
   color: black !important;
 }
 
+.logSignModal {
+  max-width: 28rem;
+}
+
 .logSignForm {
   padding: 2rem;
   -webkit-box-sizing: border-box;
@@ -948,7 +969,7 @@ html, body {
   background-color: #2e3035;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 699px) {
   .mobileToggle {
     display: -webkit-box !important;
     display: -ms-flexbox !important;
@@ -1015,11 +1036,27 @@ html, body {
   .fullScreenButton {
     display: none;
   }
+  .animatedModal {
+    z-index: 4;
+    -webkit-box-align: unset;
+        -ms-flex-align: unset;
+            align-items: unset;
+    height: calc(100% - 3rem);
+  }
+  .uploadContainer {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 0 0.4rem !important;
+    overflow-y: auto;
+  }
   .uploadComp {
-    -ms-grid-columns: 100%;
-        grid-template-columns: 100%;
-    -ms-grid-rows: (minmax(2rem, 1fr))[auto-fill];
-        grid-template-rows: repeat(auto-fill, minmax(2rem, 1fr));
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+        -ms-flex-direction: column-reverse;
+            flex-direction: column-reverse;
   }
   .uploadComp .uploadForm {
     margin-top: 2rem;
@@ -1041,16 +1078,17 @@ html, body {
   .uploadModal {
     background-color: #2e3035;
     display: block;
-    overflow-x: hidden;
-    overflow-y: auto;
+    /* overflow-x: hidden;
+        overflow-y: auto; */
+    overflow: hidden;
     height: 100%;
   }
-  .uploadModal .innerContent {
+  .innerContent {
+    z-index: 3;
     border-radius: 0;
     border: none;
-    padding: 2rem 0;
   }
-  .uploadModal .innerContent .closeButton {
+  .innerContent .closeButton {
     right: 2%;
     top: 2%;
     height: 1rem;
@@ -1063,8 +1101,25 @@ html, body {
   .logSignContainer {
     margin-top: 2rem;
   }
+  .logSignForm {
+    padding: 2rem 1.2rem;
+  }
   .logSignForm input {
     min-width: unset;
+  }
+  .commentFormSimple {
+    margin: 0 auto;
+    max-width: 94%;
+  }
+  .commentFormSimple .flexWrapper {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .commentSection {
+    margin: 0 auto;
+    max-width: 94%;
   }
 }
 /*# sourceMappingURL=customStyles.css.map */
