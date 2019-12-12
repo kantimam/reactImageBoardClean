@@ -3,17 +3,17 @@ import PostItem from './posts/PostItem'
 import Loading from './loading'
 
 const ImageFeed = ({ posts, pathUrl }) => {
-
     /* handle loading */
-    if (!posts || posts.length === 0) {
+    if (!posts || !posts.length) {
         return (
             <Loading/>
         )
     }
+    console.log(posts[2])
 
     return (
         <div id='imageBoard' className={'imageGrid'}>
-            {(posts && posts.length > 0) && posts.map((post, index) =>
+            {posts.map((post, index) =>
                 <PostItem
                     index={index}
                     key={"postItem" + index}

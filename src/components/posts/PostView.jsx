@@ -11,14 +11,16 @@ import PostPreview from './PostPreview.jsx';
 import Loading from '../loading';
 
 
-const PostView = ({ post, preview, getPostWithPreview, getPost, toggleFullscreen }) => {
+
+const PostView = React.memo(function({ post, preview, getPostWithPreview, getPost, toggleFullscreen, match }) {
   const [loading, setLoad] = useState(false);
-  const params = useParams();
+  const {params}=match;
   useEffect(() => {
     if(setLoad){
       setLoad(false)
     }
-    getPostWithPreview(params.id || 0, params.from);
+    /* getPostWithPreview(params.id || 0, params.from); */
+    getPost(params.id)
     /* if there is no post after 1 second show the loading indicator */
     const loadingFallback = setTimeout(() => {
       if (!post || !post.thumbnail) setLoad(true);
@@ -26,7 +28,7 @@ const PostView = ({ post, preview, getPostWithPreview, getPost, toggleFullscreen
     return () => {
       clearTimeout(loadingFallback);
     };
-  }, [params])
+  }, [match.url])
 
 
   /*   if (!post || post.id != params.id) return loading ? <Loading /> : null
@@ -51,7 +53,7 @@ const PostView = ({ post, preview, getPostWithPreview, getPost, toggleFullscreen
           </div>
 
           {<PostRating
-            tags={post.tags}
+            // tags={post.tags}
             postId={post.id}
             rating={post.rating}
             /* vote={this.state.vote} */
@@ -73,7 +75,7 @@ const PostView = ({ post, preview, getPostWithPreview, getPost, toggleFullscreen
 
     </div>
   )
-}
+})
 
 const mapStateToProps = state => ({
   post: state.posts.current,

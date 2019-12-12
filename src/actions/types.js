@@ -1,4 +1,6 @@
 export const GET_POST = 'GET_POST';
+
+export const GET_POSTS='GET_POSTS';
 export const GET_NEW_POSTS = 'GET_NEW_POSTS';
 export const GET_POPULAR_POSTS = 'GET_POPULAR_POSTS';
 export const SEARCH_POSTS = "SEARCH_POSTS"
@@ -6,6 +8,8 @@ export const GET_USER_POSTS = "GET_USER_POSTS"
 export const GET_FAVORITE_POSTS = "GET_FAVORITE_POSTS"
 export const SET_PREVIEW = "SET_PREVIEW"
 
+export const LOAD_NEXT_PAGE="LOAD_NEXT_PAGE";
+export const LOAD_PREV_PAGE="LOAD_PREV_PAGE";
 export const NEXT_NEW_POSTS = "NEXT_NEW_POSTS";
 export const PREV_NEW_POSTS = "PREV_NEW_POSTS"
 export const NEXT_SEARCH_POSTS = "NEXT_SEARCH_POSTS"

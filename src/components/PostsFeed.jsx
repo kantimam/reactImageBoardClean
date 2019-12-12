@@ -9,16 +9,16 @@ const PostsFeed = ({getPosts, posts}) => {
             getPosts()
         }
     }, [])
-    
+
     return (
-        <ImageFeed posts={posts.data} pathUrl={"new"}/>
+        <ImageFeed posts={posts} pathUrl={"new"}/>
     )
 }
 
 
 
 
-const NewPostsFeed=connect((state)=>({posts:state.posts.new}), {getPosts:()=>getNewPosts()})(PostsFeed)
+const NewPostsFeed=connect((state)=>({posts:state.posts.newPosts}), {getPosts:()=>getNewPosts()})(PostsFeed)
 const PopularPostsFeed=connect((state)=>({posts:state.posts.new}), {getPosts:()=>getPopularPosts()})(PostsFeed)
 const FavoritePostsFeed=connect((state)=>({posts:state.posts.favorite}), {getPosts:()=>getFavoritePosts()})(PostsFeed)
 const UserPostsFeed=connect((state)=>({posts:state.posts.user}), {getPosts:()=>getUserPosts()})(PostsFeed)

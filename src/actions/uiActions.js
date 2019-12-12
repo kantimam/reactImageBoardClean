@@ -1,7 +1,7 @@
-import {TOGGLE_FULLSCREEN} from './types';
+import { TOGGLE_FULLSCREEN } from './types';
 
-export const toggleFullscreen = () => dispatch => {
-    dispatch({
-        type: TOGGLE_FULLSCREEN,
-    })
-  }
+export const toggleFullscreen = () => (dispatch) => {
+  dispatch({
+    type: TOGGLE_FULLSCREEN,
+  })
+}
