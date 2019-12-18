@@ -340,11 +340,12 @@ html,body{
 
 /* NAVBAR STYLING */
 .mainNavBar{
-    max-width: $containerWidth;
-    width: 100%;
+    max-width: 96%;
+    width: $containerWidth;
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     .navItem{
         height: 100%;
         box-sizing: border-box;

@@ -24,6 +24,7 @@ export const PREV_USER_POSTS = "PREV_USER_POSTS"
 export const CREATE_COMMENT = "CREATE_COMMENT"
 
 export const LOGIN = "LOGIN"
+export const GET_USER_DATA="GET_USER_DATA"
 export const LOGOUT = "LOGOUT"
 
 export const TOGGLE_FULLSCREEN = "TOGGLE_FULLSCREEN"

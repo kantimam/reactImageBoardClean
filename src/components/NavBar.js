@@ -14,9 +14,9 @@ const NavBar = ({mobileNavOpen, loggedIn , location, history,  ...props}) => {
           UPLOAD
         </NavLink>
 
-        <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to="/popular">
+        {/* <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to="/popular">
           POPULAR
-        </NavLink>
+        </NavLink> */}
 
         <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to="/new">
           NEW
@@ -33,7 +33,7 @@ const NavBar = ({mobileNavOpen, loggedIn , location, history,  ...props}) => {
             <NavLink activeClassName="active" className={'undecoratedLink centerAll pointer navItem'} to="/profile">
               PROFILE
             </NavLink>
-            <div key='navLogOutButton' /* onClick={logOut} */ className={`navItem centerAll logOutButton`}>
+            <div key='navLogOutButton' /* onClick={logOut} */ className={`navItem centerAll logOutButton pointer`}>
               LOG OUT
             </div>
           </>:

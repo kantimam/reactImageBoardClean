@@ -1,21 +1,35 @@
-import {LOGIN, GET_NEW_POSTS} from '../actions/types';
+import {LOGIN, GET_USER_DATA, LOGOUT} from '../actions/types';
 
 const initialState={
     user: {},
-    token: null
+    token: null,
+    loggedIn: false
 }
 
 export default function(state=initialState, action){
     switch(action.type){
         case LOGIN:
+            return action.payload?
+            {
+                ...state,
+                token: action.payload,
+                loggedIn: true
+            }:
+            state
+        case GET_USER_DATA:
+            console.log(action)
             return {
                 ...state,
-                current: action.payload
+                user: action.payload,
+                token: action.token,
+                loggedIn: true
             }
-        case GET_NEW_POSTS:
+        case LOGOUT:
             return {
                 ...state,
-                new: action.payload
+                user: {},
+                token: null,
+                loggedIn: false
             }
         default:
             return state;

@@ -47,9 +47,9 @@ const PostView = React.memo(function({ post, preview, getPostWithPreview, getPos
               </i>
             </div>
 
-            {<PostNavigation
+            <PostNavigation
               preview={preview}
-            />}
+            />
           </div>
 
           {<PostRating

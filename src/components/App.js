@@ -23,36 +23,11 @@ class App extends Component {
     super(props)
     this.scrollRef = React.createRef();
 
-    this.imageFeed = {};
-    this.postsPagination = {};
-    this.postsSearchPagination = {};
-    this.postsUserFavoritePagination = {};
-    this.loadingMore = false;
-    this.scrollWait = false;
 
     this.state = {
       uploadOpen: false,
       logSignOpen: false,
-      loggedIn: false,
       mobileNavOpen: false,
-
-      signUpStatus: 0,
-      token: "",
-
-
-      //image board state
-      posts: [],
-      postsSearch: [],
-      postsUserFavorite: [],
-
-      postOpen: 2,
-      postOpenId: 20,
-      endReached: false,
-      loading: true,
-      error: false,
-
-      user: {}
-
     }
   }
 
@@ -61,7 +36,7 @@ class App extends Component {
 
 
   render() {
-    const {fullscreen}=this.props;
+    const {fullscreen, loggedIn}=this.props;
     return (
       
         <BrowserRouter>
@@ -73,13 +48,13 @@ class App extends Component {
                 className='mobileToggle'
               >
                 X
-                  </div>
+              </div>
 
               <Route path="" render={(props) =>
                 <NavBar
                   mobileNavOpen={this.state.mobileNavOpen}
                   logOut={this.logOut}
-                  loggedIn={this.state.loggedIn}
+                  loggedIn={loggedIn}
                   openLogSign={() => this.setState({ logSignOpen: true, mobileNavOpen: false })}
                   {...props}
                 />
@@ -98,8 +73,9 @@ class App extends Component {
               {this.state.logSignOpen && <LogSignModal loggedIn={this.loggedIn} signedUp={""} close={() => this.setState({ logSignOpen: false })} />}
 
               <Switch>
-                <Route path={"/:from(new|popular|search|favorite|user)/post/:id"} component={PostView} />
+                <Route path={"/:from(new|search|favorite|user)/post/:id"} component={PostView} />
                 {/* <Route path={"/:from(new|popular|favorite|user)?"} component={PostsFeed} /> */}
+                <Route path={"/profile"} render={(props)=><SearchPostsFeed {...props} searchMode="search"/>} />
                 <Route path={"/search/:search"} render={(props)=><SearchPostsFeed {...props} searchMode="search"/>} />
                 <Route path={"/searchstrict/:search"} render={(props)=><SearchPostsFeed {...props} searchMode="searchstrict"/>} />
                 <Route path={"/tags/:search"} render={(props)=><SearchPostsFeed {...props} searchMode="tag"/>} />
@@ -116,4 +92,4 @@ class App extends Component {
   }
 }
 
-export default connect((state)=>({fullscreen:state.ui.fullscreen}))(App)
+export default connect((state)=>({fullscreen:state.ui.fullscreen, loggedIn: state.user.loggedIn}))(App)
