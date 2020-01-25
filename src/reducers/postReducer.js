@@ -8,9 +8,7 @@ import {
     LOAD_PREV_PAGE,
     GET_POSTS,
 } from '../actions/types';
-import {
-    metaProperty
-} from '@babel/types';
+
 
 const initialState = {
     user: [],

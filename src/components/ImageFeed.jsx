@@ -9,7 +9,6 @@ const ImageFeed = ({ posts, pathUrl }) => {
             <Loading/>
         )
     }
-    console.log(posts[2])
 
     return (
         <div id='imageBoard' className={'imageGrid'}>
